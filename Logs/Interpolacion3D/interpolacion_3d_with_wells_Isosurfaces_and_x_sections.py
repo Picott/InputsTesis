@@ -2,9 +2,12 @@ import pandas as pd
 import pyvista as pv
 import numpy as np
 from scipy.spatial import cKDTree
+import os
+
+base_dir = os.path.dirname(os.path.abspath(__file__))
 
 # === RUTA DEL ARCHIVO ===
-RUTA_INPUT = "C:/Users/Anjuli/Documents/Inputs/Vshale/withID/pozos_segmentados.csv"
+RUTA_INPUT = os.path.join(base_dir, '..', '..', 'Vshale', 'withID','pozos_segmentados.csv')
 
 # === Cargar datos ===
 df = pd.read_csv(RUTA_INPUT)
