@@ -1,8 +1,0 @@
-Registro,Boreas-1,Poseidon-2,Proteus-1,Proteus-1_ST1,Proteus-1_ST2,Pharos-1,Poseidon-1
-DEPTH,✅,✅,✅,✅,✅,✅,✅
-TVD,✅,✅,❌,❌,❌,✅,❌
-GR,✅,✅,✅,✅,✅,✅,✅
-RHOB,✅,❌,❌,❌,❌,✅,✅
-TNPH,✅,✅,❌,❌,❌,✅,✅
-PEF,✅,✅,❌,❌,❌,✅,✅
-Resistividad,✅ (TAB_RES),✅ (ROBB),❌,❌,❌,❌,"✅ (P10H, P16H, P22H, P28H, P34H, P40H)"
