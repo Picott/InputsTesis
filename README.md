@@ -28,7 +28,7 @@ El desarrollo se realizó completamente con **software libre**, empleando:
 ## 🔁 Flujo de Trabajo
 
 1. **[Conversión de Registros Originales](Logs/LasACsv/las_to_csv_Integrated.py)**
-   - Conversión de `.LAS` → `.CSV`
+   - Conversión de `.LAS` → `.CSV`  
    - Repositorio de registros descargados desde [NOPIMS](https://nopims.dmp.wa.gov.au/Nopims/)
 
 2. **[Normalización y Cálculo de Vshale](Logs/Normalizacion/normalizacion_vshale_well_id.py)**
@@ -49,20 +49,6 @@ El desarrollo se realizó completamente con **software libre**, empleando:
    - Generación de isosuperficies de Vshale
    - Cortes en X/Y para análisis geoespacial
    - Visualización en PyVista
-
-### ▶️ Ejecución rápida paso a paso
-
-Usa el script **`run_model_pipeline.py`** para seguir el flujo completo desde la conversión hasta la interpolación:
-
-```bash
-# Solo mostrar los pasos y validar prerrequisitos
-python run_model_pipeline.py
-
-# Ejecutar todos los pasos en orden (omite la conversión si ya tienes CSV)
-python run_model_pipeline.py --execute --skip-conversion
-```
-
-El script revisa que existan los insumos necesarios en `Resources/las`, `Resources/csv` y `Vshale/withID` antes de lanzar cada etapa.
 
 ---
 
