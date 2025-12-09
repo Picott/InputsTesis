@@ -4,95 +4,132 @@ import numpy as np
 from scipy.spatial import cKDTree
 import os
 
-
+# ==========================================
+# 1. CARGA DE DATOS
+# ==========================================
 base_dir = os.path.dirname(os.path.abspath(__file__))
+# Ajusta la ruta si es necesario. Si el csv está en la misma carpeta, usa solo el nombre.
+archivo = os.path.join(base_dir, '..', '..', 'Vshale', 'withID', 'pozos_segmentados.csv')
 
-# === RUTA DEL ARCHIVO ===
-RUTA_INPUT = os.path.join(base_dir, '..', '..', 'Vshale', 'withID','pozos_segmentados.csv')
+# Fallback por seguridad
+if not os.path.exists(archivo):
+    archivo = 'pozos_segmentados.csv'
 
-# === Cargar datos ===
-df = pd.read_csv(RUTA_INPUT)
+print(f"📂 Cargando archivo: {archivo}")
+df_raw = pd.read_csv(archivo)
 
-# Verificar que las columnas necesarias estén en el archivo
-columnas_necesarias = ['Pozo_ID', 'DEPTH', 'X', 'Y', 'Vshale', 'Segmento_ID']
-if not all(col in df.columns for col in columnas_necesarias):
-    raise ValueError(f"⚠ ERROR: El archivo no contiene todas las columnas necesarias: {columnas_necesarias}")
+# Filtrar nulos esenciales
+df_raw = df_raw.dropna(subset=['Vshale', 'X', 'Y', 'DEPTH', 'Segmento_ID'])
 
-# === Convertir DEPTH a Z (negativo para que profundidad sea "hacia abajo") ===
-df['Z'] = -df['DEPTH']
+# ==========================================
+# 2. PROCESO DE "BLOCKING" (UPSCALING)
+# ==========================================
+print("🔨 Realizando Blocking por Segmento_ID...")
+# Agrupamos los miles de puntos en bloques geológicos representativos
+df = df_raw.groupby(['Pozo_ID', 'Segmento_ID']).agg({
+    'X': 'mean',
+    'Y': 'mean',
+    'DEPTH': 'mean',     
+    'Vshale': 'mean'     
+}).reset_index()
 
-# === Crear grid 3D ===
-grid_size = 50  # Ajusta esto según el tamaño de tu modelo
-x_min, x_max = df['X'].min(), df['X'].max()
-y_min, y_max = df['Y'].min(), df['Y'].max()
-z_min, z_max = df['Z'].min(), df['Z'].max()
+df['Z'] = -df['DEPTH'] # Z negativo
 
-# Crear malla regular en el espacio 3D
-x = np.linspace(x_min, x_max, grid_size)
-y = np.linspace(y_min, y_max, grid_size)
-z = np.linspace(z_min, z_max, grid_size)
+print(f"✅ Datos reducidos a {len(df)} bloques de control.")
+
+# ==========================================
+# 3. INTERPOLACIÓN ANISOTRÓPICA
+# ==========================================
+ANISOTROPY_FACTOR = 0.05 
+grid_x, grid_y, grid_z = 50, 50, 100
+
+x = np.linspace(df['X'].min(), df['X'].max(), grid_x)
+y = np.linspace(df['Y'].min(), df['Y'].max(), grid_y)
+z = np.linspace(df['Z'].min(), df['Z'].max(), grid_z)
 X, Y, Z = np.meshgrid(x, y, z, indexing="ij")
-
-# Aplanar las coordenadas de la malla
 grid_points = np.column_stack([X.ravel(), Y.ravel(), Z.ravel()])
 
-# === Aplicar interpolación IDW (Inverse Distance Weighting) ===
-tree = cKDTree(df[['X', 'Y', 'Z']].values)
-distances, idx = tree.query(grid_points, k=5)  # Usamos los 5 puntos más cercanos
+print("🔄 Calculando modelo 3D...")
 
-# Pesos IDW
-weights = 1 / (distances + 1e-10)  # Evitamos división por cero
+# Coordenadas escaladas para el cálculo
+points_calc = df[['X', 'Y', 'Z']].values.copy()
+points_calc[:, 2] *= (1 / ANISOTROPY_FACTOR)
+grid_calc = grid_points.copy()
+grid_calc[:, 2] *= (1 / ANISOTROPY_FACTOR)
+
+# IDW
+tree = cKDTree(points_calc)
+distances, idx = tree.query(grid_calc, k=4) 
+weights = 1 / (distances**2.5 + 1e-12)
 weights /= weights.sum(axis=1, keepdims=True)
-
-# Interpolar valores de Vshale
 interpolated_values = np.sum(weights * df['Vshale'].values[idx], axis=1)
 
-# Crear objeto StructuredGrid de PyVista
-structured_grid = pv.StructuredGrid(X, Y, Z)
+# Crear Grid
+grid = pv.StructuredGrid(X, Y, Z)
+grid["Vshale"] = interpolated_values
 
-# 🔴 VERIFICACIÓN DE DIMENSIONES 🔴
-if interpolated_values.shape[0] != structured_grid.n_points:
-    raise ValueError(f"⚠ ERROR: La cantidad de valores interpolados ({interpolated_values.shape[0]}) "
-                     f"no coincide con el número de puntos en la malla ({structured_grid.n_points}).")
+# ==========================================
+# 4. VISUALIZACIÓN INTERACTIVA CON SLIDERS
+# ==========================================
+print("🎨 Generando interfaz interactiva...")
 
-structured_grid["Vshale"] = interpolated_values  # Asignar valores corregidos
-
-# === Crear nube de puntos de los pozos ===
-points = df[['X', 'Y', 'Z']].values
-cloud = pv.PolyData(points)
-cloud['Segmento_ID'] = df['Segmento_ID']  # Asignar colores por segmento
-
-# === Crear visualización en PyVista ===
 plotter = pv.Plotter()
 
-# Añadir la interpolación 3D como volumen
-plotter.add_mesh(structured_grid, scalars="Vshale", cmap="viridis", opacity=0.5)
+# Límite de color enfocado en los datos reales
+clim_range = [0, max(df['Vshale'].max(), 0.2)] 
+cmap = "viridis"
 
-# Añadir los pozos como nube de puntos
-plotter.add_mesh(cloud, scalars="Segmento_ID", cmap="rainbow", point_size=5, render_points_as_spheres=True)
+# A) VOLUMEN y POZOS (Fijos)
+plotter.add_mesh(grid, scalars="Vshale", cmap=cmap, clim=clim_range, 
+                 opacity=0.10, label="Volumen Transparente")
 
-# Añadir etiquetas con los nombres de los pozos
-pozos_unicos = df.groupby('Pozo_ID').first().reset_index()
-for _, pozo in pozos_unicos.iterrows():
-    plotter.add_point_labels(
-        [pozo['X'], pozo['Y'], pozo['Z']],  # Coordenadas en 3D
-        [pozo['Pozo_ID']],  # Etiqueta con el nombre del pozo
-        font_size=12,
-        point_color='black',
-        text_color='white',
-        always_visible=True,
-    )
+cloud = pv.PolyData(df[['X', 'Y', 'Z']].values)
+cloud['Vshale'] = df['Vshale']
+plotter.add_mesh(cloud, scalars="Vshale", cmap=cmap, clim=clim_range, 
+                 point_size=8, render_points_as_spheres=True, label="Segmentos")
 
-# Calcular el centro de la nube de puntos para ajustar la cámara
-center = [(x_min + x_max) / 2, (y_min + y_max) / 2, (z_min + z_max) / 2]
+# B) FUNCIONES PARA LOS SLIDERS
+center = grid.center
 
-# Ajustar cámara para incluir todo
-plotter.camera_position = [
-    (center[0] + 2000, center[1] + 2000, center[2] + 500),  # Posición de la cámara
-    center,  # Punto de enfoque
-    (0, 0, 1)  # Vector de orientación (Z hacia arriba)
-]
+def update_x_slice(value):
+    """Actualiza el corte X"""
+    slice_mesh = grid.slice(normal='x', origin=(value, center[1], center[2]))
+    plotter.add_mesh(slice_mesh, name="corte_x", cmap=cmap, clim=clim_range, show_edges=False)
 
-plotter.add_axes()
-plotter.add_title("Interpolación 3D de Vshale con Pozos y Nombres")
+def update_y_slice(value):
+    """Actualiza el corte Y"""
+    slice_mesh = grid.slice(normal='y', origin=(center[0], value, center[2]))
+    plotter.add_mesh(slice_mesh, name="corte_y", cmap=cmap, clim=clim_range, show_edges=False)
+
+# C) CONFIGURAR SLIDERS
+plotter.add_slider_widget(
+    update_x_slice, 
+    [df['X'].min(), df['X'].max()], 
+    value=center[0],
+    title="Mover Corte X (Este-Oeste)",
+    pointa=(0.025, 0.1), pointb=(0.25, 0.1),
+    style='modern'
+)
+
+plotter.add_slider_widget(
+    update_y_slice, 
+    [df['Y'].min(), df['Y'].max()], 
+    value=center[1],
+    title="Mover Corte Y (Norte-Sur)",
+    pointa=(0.025, 0.25), pointb=(0.25, 0.25),
+    style='modern'
+)
+
+# Etiquetas y ejes
+plotter.add_point_labels(df.groupby('Pozo_ID').first()[['X','Y','Z']].values, 
+                         df.groupby('Pozo_ID').first().index, font_size=10, text_color='black', always_visible=True)
+
+plotter.show_grid(color='black')
+plotter.add_title("Visualización Interactiva de Vshale")
+plotter.view_isometric()
+
+# Inicializar cortes
+update_x_slice(center[0])
+update_y_slice(center[1])
+
 plotter.show()
