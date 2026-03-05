@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Ruta del archivo segmentado
-RUTA_INPUT = "C:/Users/Anjuli/Documents/Inputs/Vshale/withID/pozos_segmentados.csv"
+RUTA_INPUT = "C:\\Users\\juand\\Desktop\\TESIS FINAL SEGMENT\\InputsTesis-main\\Vshale\\withID\\pozos_segmentados.csv"
 
 # Cargar datos
 df = pd.read_csv(RUTA_INPUT)

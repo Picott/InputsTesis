@@ -1,0 +1,83 @@
+TÍTULO DE LA TESIS
+Propuesta de título: Detección y Análisis (título definitivo por confirmar)
+
+AUTOR
+Juan David Basto Picott
+
+PROGRAMA
+[Nombre del programa]
+
+UNIVERSIDAD
+[Nombre de la Universidad]
+
+DIRECTOR / TUTOR
+[Nombre del tutor]
+
+FECHA
+[Mes, Año]
+
+RESUMEN
+Este trabajo presenta el desarrollo, implementación y validación de un sistema para la detección y análisis de [describir problema]. Se emplearon técnicas de [métodos principales], con un flujo de trabajo que incluyó recolección de datos, preprocesamiento, diseño y entrenamiento de modelos, y evaluación mediante métricas estándar. Los resultados muestran un desempeño prometedor para la aplicación propuesta.
+
+PALABRAS CLAVE
+[palabra1, palabra2, palabra3]
+
+ABSTRACT
+(English summary here)
+
+AGRADECIMIENTOS
+Agradezco a mi director de tesis, al grupo de investigación y a mi familia por su apoyo durante este trabajo.
+
+ÍNDICE
+1. Introducción
+2. Planteamiento del problema y Justificación
+3. Objetivos
+4. Revisión bibliográfica
+5. Materiales y métodos
+6. Resultados
+7. Discusión
+8. Conclusiones y recomendaciones
+9. Referencias
+10. Anexos
+
+1. INTRODUCCIÓN
+Contexto general del área y motivación del estudio. Descripción breve del problema y su relevancia. Alcance del estudio y estructura del documento.
+
+2. PLANTEAMIENTO DEL PROBLEMA Y JUSTIFICACIÓN
+Definición del problema de investigación, preguntas y/o hipótesis. Justificación del estudio en términos de impacto académico y/o práctico.
+
+3. OBJETIVOS
+Objetivo general:
+Desarrollar e implementar un sistema de [descripción] para [propósito].
+
+Objetivos específicos:
+- Recolectar y preprocesar los datos.
+- Diseñar y entrenar modelos adecuados.
+- Evaluar el desempeño con métricas relevantes.
+- Comparar con métodos existentes.
+
+4. REVISIÓN BIBLIOGRÁFICA
+Resumen de trabajos relevantes y tecnologías. Marco teórico sobre técnicas usadas (p. ej., redes neuronales, métricas de evaluación, etc.).
+
+5. MATERIALES Y MÉTODOS
+Descripción de los datos (origen, tamaño del dataset, tipos de datos). Preprocesamiento: normalización, aumento de datos, división en conjuntos. Arquitectura y modelos: descripción de las redes/algoritmos. Protocolo de entrenamiento y evaluación (hiperparámetros, métricas, validación).
+
+6. RESULTADOS
+Presentación de resultados cuantitativos (tablas de métricas) y cualitativos (ejemplos visuales). Análisis de errores y comparación con trabajos previos.
+
+7. DISCUSIÓN
+Interpretación de los resultados, limitaciones del estudio y consecuencias prácticas.
+
+8. CONCLUSIONES Y RECOMENDACIONES
+Conclusiones principales y recomendaciones para implementación y trabajo futuro.
+
+9. REFERENCIAS
+[Lista de referencias en formato requerido]
+
+10. ANEXOS
+- Anexo A: Documentación de recolección de datos (ver `ANEXO A.pdf`).
+- Avances: `Avance_1_Juan David Basto Picott.pdf`.
+- Código y materiales suplementarios.
+
+NOTAS FINALES
+Este documento es la versión inicial del informe final. Proporcione los datos específicos (nombres, métricas, tablas, figuras y formato de citación) para completar los campos en corchetes. También puedo extraer automáticamente la información de los PDFs anexos si lo autoriza.
