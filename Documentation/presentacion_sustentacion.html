@@ -93,10 +93,50 @@
       pointer-events: none;
     }
 
+    /* ── IMAGE PANELS ── */
+    .slide-img {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      object-fit: cover;
+    }
+
+    .img-col {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .img-caption {
+      font-size: 0.68rem;
+      color: var(--muted);
+      text-align: center;
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    .vshale-gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      width: 100%;
+    }
+
+    .vshale-gallery img {
+      width: 100%;
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
     /* slides are transparent — canvas shows through */
     .slide {
       background: transparent !important;
     }
+
 
     /* ── GRID OVERLAY (kept subtle on top of canvas) ── */
     .slide::before {
@@ -754,7 +794,8 @@
       data-notes="Nos enfrentamos a un reto común en la academia: el software industrial es poderoso pero prohibitivamente costoso y, con frecuencia, opaco. Los estudiantes aprenden a hacer clic en botones sin entender la geoestadística que hay detrás. Esto genera una brecha en nuestra comprensión fundamental de la caracterización de yacimientos.">
       <div class="badge">Motivación</div>
       <h2 class="slide-title">El Problema</h2>
-      <div class="grid-2">
+      <div
+        style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; max-width:1200px; width:100%; align-items:start;">
         <div class="card">
           <div class="card-title">💸 Software Comercial</div>
           <ul class="bullets">
@@ -770,6 +811,11 @@
             <li>Se aprende a <strong>hacer clic</strong>, no a comprender</li>
             <li>Falta de <strong>reproducibilidad</strong> y <strong>transparencia</strong></li>
           </ul>
+        </div>
+        <div class="img-col">
+          <img src="img/caswell_map.png" class="slide-img" alt="Mapa Subcuenca Caswell" style="max-height:280px;">
+          <div class="img-caption">Subcuenca Caswell – Cuenca de Browse, Australia<br>Fuente de datos públicos (NOPIMS)
+          </div>
         </div>
       </div>
     </section>
@@ -836,12 +882,18 @@
           </ul>
         </div>
         <div class="card">
-          <div class="card-title">📊 Procesamiento y visualización</div>
+          <div class="card-title">&#128266; Procesamiento y visualizaci&oacute;n</div>
           <ul class="bullets">
             <li><code>NumPy / SciPy</code> — cálculos matemáticos e interpolación</li>
             <li><code>PyVista</code> — visualización 3D interactiva</li>
           </ul>
         </div>
+      </div>
+      <div class="img-col" style="margin-top:16px; max-width:1100px; width:100%;">
+        <img src="img/las_pipeline.png" class="slide-img" alt="Pipeline LAS a CSV"
+          style="max-height:160px; object-fit:contain;">
+        <div class="img-caption">Ingesta de datos: archivos .LAS (estándar industria) → Python (lasio) → .CSV
+          estructurado</div>
       </div>
     </section>
 
@@ -850,7 +902,8 @@
       data-notes="La metodolog&iacute;a se fundamenta en el Constructivismo: el conocimiento se construye activamente resolviendo problemas reales con datos de pozos. El OVA se organiza en tres momentos pedagógicos y cuatro fichas t&eacute;cnicas modulares que el estudiante ejecuta progresivamente hasta generar su propio modelo 3D.">
       <div class="badge">Marco Metodol&oacute;gico</div>
       <h2 class="slide-title">Enfoque Pedagógico y Flujo Técnico</h2>
-      <div class="grid-2" style="max-width:1100px; width:100%; align-items:start;">
+      <div
+        style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; max-width:1260px; width:100%; align-items:start;">
         <div class="card">
           <div class="card-title">&#128218; Secuencia Did&aacute;ctica (Constructivismo)</div>
           <ul class="bullets">
@@ -876,35 +929,63 @@
               PyVista</li>
           </ul>
         </div>
+        <div class="img-col">
+          <img src="img/ova_phases.png" class="slide-img" alt="Fases did&aacute;cticas OVA"
+            style="max-height:300px; object-fit:contain;">
+          <div class="img-caption">Secuencia did&aacute;ctica constructivista del OVA</div>
+        </div>
       </div>
     </section>
 
     <!-- -- SLIDE 6: CALCULO VSHALE -- -->
     <section class="slide slide-06"
       data-notes="Aquí vemos el resultado del script de normalización. La curva de Vshale refleja con precisión la litología, proporcionando la base para nuestro modelo 3D.">
-      <div class="badge">Resultados – Vshale</div>
-      <h2 class="slide-title">Cálculo del Vshale</h2>
-      <div class="content-area">
-        <div class="formula-box">
-          Vshale = 0.083 × (2<sup>3.7 × GR_norm</sup> − 1) &nbsp;&nbsp;&nbsp; [Larionov – Formaciones Terciarias]
-        </div>
-        <div class="grid-2" style="width:100%">
-          <div class="card">
-            <div class="card-title">📥 Proceso</div>
-            <ul class="bullets">
-              <li><strong>Entrada:</strong> Gamma Ray (GR) crudo de pozos</li>
-              <li><strong>Paso 1:</strong> Normalización del GR (GRmin / GRmax por pozo)</li>
-              <li><strong>Paso 2:</strong> Aplicación ecuación Larionov (formaciones modernas)</li>
-              <li><strong>Salida:</strong> Curva Vshale continua (0 a 1) por pozo</li>
-            </ul>
+      <div class="badge">Resultados &ndash; Vshale</div>
+      <h2 class="slide-title">C&aacute;lculo del Vshale</h2>
+      <div
+        style="display:grid; grid-template-columns:1fr 1fr; gap:18px; max-width:1260px; width:100%; align-items:start;">
+        <div>
+          <div class="formula-box">Vshale = 0.083 &times; (2<sup>3.7 &times; GR<sub>norm</sub></sup> &minus; 1) &nbsp;
+            [Larionov &ndash; Terciario]</div>
+          <div class="grid-2" style="width:100%; margin-top:12px;">
+            <div class="card">
+              <div class="card-title">&#128229; Proceso</div>
+              <ul class="bullets">
+                <li><strong>Entrada:</strong> Gamma Ray (GR) crudo de pozos</li>
+                <li><strong>Paso 1:</strong> Normalizaci&oacute;n GR (min/max por pozo)</li>
+                <li><strong>Paso 2:</strong> Aplicaci&oacute;n ecuaci&oacute;n Larionov</li>
+                <li><strong>Salida:</strong> Curva Vshale (0&ndash;1) por pozo</li>
+              </ul>
+            </div>
+            <div class="card">
+              <div class="card-title">&#128228; Interpretaci&oacute;n</div>
+              <ul class="bullets">
+                <li><span class="highlight-green">Vshale &asymp; 0</span> &rarr; Arena (reservorio)</li>
+                <li><span class="highlight-gold">Vshale &asymp; 0.5</span> &rarr; Zona transicional</li>
+                <li><span class="highlight-purple">Vshale &asymp; 1</span> &rarr; Lutita (sello)</li>
+              </ul>
+            </div>
           </div>
-          <div class="card">
-            <div class="card-title">📤 Interpretación</div>
-            <ul class="bullets">
-              <li><span class="highlight-green">Vshale cercano a 0</span> → Roca limpia (Arena/reservorio)</li>
-              <li><span class="highlight-gold">Vshale cercano a 0.5</span> → Limolita / zona transicional</li>
-              <li><span class="highlight-purple">Vshale cercano a 1</span> → Lutita / sello</li>
-            </ul>
+        </div>
+        <div class="img-col">
+          <img src="img/well_log.png" class="slide-img" alt="Well Log GR y Vshale"
+            style="max-height:300px; object-fit:contain;">
+          <div class="img-caption">Registro GR &rarr; c&aacute;lculo Vshale (Larionov) &rarr; columna litol&oacute;gica
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:14px; max-width:1260px; width:100%;">
+        <div class="img-caption" style="margin-bottom:6px; font-size:0.75rem;">Perfiles reales de Vshale (datos NOPIMS
+          &ndash; Subcuenca Caswell):</div>
+        <div class="vshale-gallery">
+          <div class="img-col"><img src="img/vshale_boreas.png" alt="Boreas_1 Vshale">
+            <div class="img-caption">Boreas-1</div>
+          </div>
+          <div class="img-col"><img src="img/vshale_poseidon.png" alt="Poseidon_1 Vshale">
+            <div class="img-caption">Poseidon-1</div>
+          </div>
+          <div class="img-col"><img src="img/vshale_proteus.png" alt="Proteus_1 Vshale">
+            <div class="img-caption">Proteus-1</div>
           </div>
         </div>
       </div>
@@ -949,6 +1030,12 @@
           <div class="stat-val">$0</div>
           <div class="stat-label">Costo de licencias</div>
         </div>
+      </div>
+      <div class="img-col" style="margin-top:14px; max-width:1260px; width:100%;">
+        <img src="img/model_3d.png" class="slide-img" alt="Modelo 3D Vshale IDW"
+          style="max-height:200px; object-fit:contain;">
+        <div class="img-caption">Modelo geoestadístico 3D del Vshale &ndash; interpolaci&oacute;n IDW
+          anisotr&oacute;fica con PyVista (isosuperficies y cortes interactivos)</div>
       </div>
     </section>
 
