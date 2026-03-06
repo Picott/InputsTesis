@@ -1105,7 +1105,7 @@
           <div class="stat-label">Costo de licencias</div>
         </div>
       </div>
-      <div id="s7-images" class="s7-zoom-img"
+      <div id="s7-images" 
         style="display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:1260px; width:100%; margin-top:14px; align-items:start;">
         <div class="img-col">
           <img src="img/model_3d_slide7.jpg" alt="Modelo 3D Vshale"
@@ -1120,8 +1120,29 @@
       </div>
     </section>
 
-    <!-- -- SLIDE 8: OVA / IMPACTO EDUCATIVO -- -->
-    <section class="slide slide-08"
+    
+    <!-- -- SLIDE 8: MODELOS CLOSEUP -- -->
+    <section class="slide slide-08">
+      <div class="badge">Modelos Espaciales de Fase</div>
+      <h2 class="slide-title">Visualizaci&oacute;n Detallada 3D</h2>
+      
+      <div style="display:flex; justify-content:center; gap:20px; align-items:stretch; width:100%; height:75vh;">
+        <div style="flex:1; display:flex; flex-direction:column; background:#1e293b; border-radius:12px; padding:20px; box-shadow:0 10px 25px rgba(0,0,0,0.5); align-items:center;">
+          <img src="img/model_3d_slide7.jpg" alt="Vshale 3D" style="width:100%; height:100%; object-fit:contain; border-radius:8px;">
+          <div style="font-size:1.1rem; color:#f8fafc; font-weight:bold; margin-top:16px;">Modelo 3D Vshale</div>
+          <div style="font-size:0.9rem; color:#94a3b8; margin-top:4px;">Disociaci&oacute;n estratigr&aacute;fica con Z=0.05</div>
+        </div>
+        
+        <div style="flex:1; display:flex; flex-direction:column; background:#1e293b; border-radius:12px; padding:20px; box-shadow:0 10px 25px rgba(0,0,0,0.5); align-items:center;">
+          <img src="img/model_3d_gr.jpg" alt="Gamma Ray 3D" style="width:100%; height:100%; object-fit:contain; border-radius:8px;">
+          <div style="font-size:1.1rem; color:#f8fafc; font-weight:bold; margin-top:16px;">Modelo 3D Gamma Ray</div>
+          <div style="font-size:0.9rem; color:#94a3b8; margin-top:4px;">Comparaci&oacute;n de contingencia lito-espacial</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -- SLIDE 9: OVA / IMPACTO EDUCATIVO -- -->
+    <section class="slide slide-09"
       data-notes="El producto principal es el OVA: un Objeto Virtual de Aprendizaje con tres componentes — repositorio GitHub, manual t&eacute;cnico y serie de 7 videos narrados por un presentador digital. Los videos muestran el c&oacute;digo en ejecuci&oacute;n y lo que el estudiante debe ir obteniendo. El OVA est&aacute; pensado como laboratorio virtual para Geoestadística, Modelamiento de Yacimientos y Petrofísica.">
       <div class="badge">OVA &ndash; Objeto Virtual de Aprendizaje</div>
       <h2 class="slide-title">El Recurso Educativo</h2>
@@ -1196,8 +1217,8 @@
       </div>
     </section>
 
-    <!-- -- SLIDE 9: CONCLUSIONES -- -->
-    <section class="slide slide-09"
+    <!-- -- SLIDE 10: CONCLUSIONES -- -->
+    <section class="slide slide-10"
       data-notes="Las conclusiones est&aacute;n directamente amarradas a cada objetivo espec&iacute;fico. OE1 se resolvi&oacute; con el preprocesamiento (.LAS&rarr;CSV). OE2 con el c&aacute;lculo Larionov. OE3 con el modelo IDW anisotr&oacute;pico. OE4 con el OVA y los 7 videos. Las recomendaciones apuntan a la siguiente fase: validaci&oacute;n con estudiantes, integraci&oacute;n s&iacute;smica y desarrollo de un visualizador interactivo.">
       <div class="badge">Conclusiones</div>
       <h2 class="slide-title">Conclusiones y Recomendaciones</h2>
@@ -1321,7 +1342,7 @@
         if (current === s.idx && index !== s.idx) {
           zoomStates[s.idx] = false;
           if(document.getElementById(s.content)) document.getElementById(s.content).style.opacity = '1';
-          let zClass = (s.idx === SLIDE7) ? 's7-zoomed' : 's3-zoomed';
+                   let zClass = 's3-zoomed';
           if(document.getElementById(s.model)) document.getElementById(s.model).classList.remove(zClass);
         }
       });
@@ -1344,13 +1365,12 @@
       // Sub-step zooming for interactive slides
       let zoomableSlides = {
         [SLIDE3]: {content: 's3-content', model: 's3-model'},
-        [SLIDE6]: {content: 's6-content', model: 's6-model'},
-        [SLIDE7]: {content: 's7-content', model: 's7-images'}
+        [SLIDE6]: {content: 's6-content', model: 's6-model'}
       };
 
       if (zoomableSlides[current]) {
         let s = zoomableSlides[current];
-        let zClass = (current === SLIDE7) ? 's7-zoomed' : 's3-zoomed';
+        let zClass = 's3-zoomed';
         if (dir === 1 && !zoomStates[current]) {
           zoomStates[current] = true;
           document.getElementById(s.content).style.opacity = '0';
@@ -1386,8 +1406,8 @@
     // ── SLIDE ANIMATION HOOKS ──────────────────────────────────────
     const SLIDE3 = 2;
     const SLIDE6 = 5;
-    const SLIDE7 = 6;
-    let zoomStates = { [SLIDE3]: false, [SLIDE6]: false, [SLIDE7]: false };
+    
+    let zoomStates = { [SLIDE3]: false, [SLIDE6]: false };
 
     // ═══════════════════════════════════════════
     // ANIMATED BACKGROUND: Fluid Gradient + Contour Lines
