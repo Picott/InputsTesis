@@ -1105,7 +1105,7 @@
           <div class="stat-label">Costo de licencias</div>
         </div>
       </div>
-      <div id="s7-images" class="s3-model-img"
+      <div id="s7-images" class="s7-zoom-img"
         style="display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:1260px; width:100%; margin-top:14px; align-items:start;">
         <div class="img-col">
           <img src="img/model_3d_slide7.jpg" alt="Modelo 3D Vshale"
@@ -1321,7 +1321,8 @@
         if (current === s.idx && index !== s.idx) {
           zoomStates[s.idx] = false;
           if(document.getElementById(s.content)) document.getElementById(s.content).style.opacity = '1';
-          if(document.getElementById(s.model)) document.getElementById(s.model).classList.remove('s3-zoomed');
+          let zClass = (s.idx === SLIDE7) ? 's7-zoomed' : 's3-zoomed';
+          if(document.getElementById(s.model)) document.getElementById(s.model).classList.remove(zClass);
         }
       });
 
@@ -1349,18 +1350,19 @@
 
       if (zoomableSlides[current]) {
         let s = zoomableSlides[current];
+        let zClass = (current === SLIDE7) ? 's7-zoomed' : 's3-zoomed';
         if (dir === 1 && !zoomStates[current]) {
           zoomStates[current] = true;
           document.getElementById(s.content).style.opacity = '0';
           document.getElementById(s.content).style.pointerEvents = 'none';
-          document.getElementById(s.model).classList.add('s3-zoomed');
+          document.getElementById(s.model).classList.add(zClass);
           return;
         }
         if (dir === -1 && zoomStates[current]) {
           zoomStates[current] = false;
           document.getElementById(s.content).style.opacity = '1';
           document.getElementById(s.content).style.pointerEvents = 'auto';
-          document.getElementById(s.model).classList.remove('s3-zoomed');
+          document.getElementById(s.model).classList.remove(zClass);
           return;
         }
       }
