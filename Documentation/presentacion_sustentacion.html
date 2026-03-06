@@ -102,38 +102,55 @@
       object-fit: cover;
     }
 
-    /* ── ZOOM / PAN ANIMATIONS ── */
-    @keyframes slowZoom {
+    /* ── KEN BURNS / ZOOM ANIMATIONS ── */
+    /* Wrapper: fixed size, clips the zooming image inside */
+    .kb-wrap {
+      overflow: hidden;
+      border-radius: 12px;
+      width: 100%;
+      display: block;
+      position: relative;
+    }
+
+    /* Slow zoom-in: Slide 3 (3D model) – 12s, stop at end */
+    @keyframes kbSlow {
       0% {
-        transform: scale(1);
+        transform: scale(1) translate(0, 0);
       }
 
       100% {
-        transform: scale(1.55);
+        transform: scale(1.45) translate(-4%, 3%);
       }
     }
 
-    @keyframes gentleZoom {
-      0% {
-        transform: scale(1);
+    .kb-slow {
+      animation: kbSlow 12s ease-in-out forwards;
+      transform-origin: center center;
+      display: block;
+      width: 100%;
+    }
+
+    /* Gentle pulse: Slide 7 – infinite, subtle */
+    @keyframes kbGentle {
+
+      0%,
+      100% {
+        transform: scale(1) translate(0, 0);
       }
 
       50% {
-        transform: scale(1.18);
-      }
-
-      100% {
-        transform: scale(1);
+        transform: scale(1.12) translate(-2%, -1%);
       }
     }
 
-    /* Slide 3 – 3D model zooms in slowly so well names become readable */
-    .anim-slow-zoom {
-      animation: slowZoom 12s ease-in-out forwards;
+    .kb-gentle {
+      animation: kbGentle 9s ease-in-out infinite;
       transform-origin: center center;
+      display: block;
+      width: 100%;
     }
 
-    /* Slide 6 – panning container; JS will drive translateX + scale via CSS var */
+    /* Slide 6 pan container — JS drives transform */
     .s6-pan-wrap {
       overflow: hidden;
       border-radius: 12px;
@@ -143,14 +160,8 @@
     .s6-pan-img {
       width: 100%;
       transition: transform 1.8s cubic-bezier(0.45, 0, 0.55, 1);
-      transform-origin: center center;
-      border-radius: 10px;
-    }
-
-    /* Slide 7 – gentle zoom on both images */
-    .anim-gentle-zoom {
-      animation: gentleZoom 9s ease-in-out infinite;
-      transform-origin: center center;
+      transform-origin: center top;
+      display: block;
     }
 
 
@@ -895,18 +906,18 @@
                   class="highlight-blue">Diap. 4–5</span></li>
               <li><strong>OE2.</strong> Calcular Vshale (Larionov terciario) &rarr; <span class="highlight-green">Diap.
                   6</span></li>
-              <li><strong>OE3.</strong> Modelo 3D IDW anisotr&oacute;fico &rarr; <span class="highlight-gold">Diap.
+              <li><strong>OE3.</strong> Modelo 3D IDW anisotr&oacute;pico &rarr; <span class="highlight-gold">Diap.
                   7</span></li>
               <li><strong>OE4.</strong> Estrategia pedag&oacute;gica audiovisual &rarr; <span
                   class="highlight-purple">Diap. 8</span></li>
             </ul>
           </div>
         </div>
-        <div class="img-col" style="grid-column: span 2; overflow:hidden; border-radius:14px;">
-          <img id="s3-model" src="img/model_3d_real.jpg" class="slide-img anim-slow-zoom"
-            alt="Modelo 3D final del proyecto" style="max-height:340px; object-fit:contain; width:100%;">
+        <div class="img-col" style="grid-column: span 2;">
+          <div class="kb-wrap"><img id="s3-model" src="img/model_3d_real.jpg" class="kb-slow"
+            alt="Modelo 3D final del proyecto" style="max-height:340px; object-fit:contain; width:100%;"></div>
           <div class="img-caption">Resultado final: Modelo 3D de Vshale &ndash; Subcuenca Caswell (IDW
-            anisotr&oacute;fico, PyVista)</div>
+            anisotr&oacute;pico, PyVista)</div>
         </div>
       </div>
     </section>
@@ -991,7 +1002,7 @@
               Larionov</li>
             <li><strong>Ficha 3:</strong> <code>segmentacion.py</code> &mdash; Blocking litol&oacute;gico (Window=5,
               Umbral=0.05)</li>
-            <li><strong>Ficha 4:</strong> <code>interpolacion_3d_with_wells.py</code> &mdash; IDW anisotr&oacute;fico +
+            <li><strong>Ficha 4:</strong> <code>interpolacion_3d_with_wells.py</code> &mdash; IDW anisotr&oacute;pico +
               PyVista</li>
           </ul>
         </div>
@@ -1036,7 +1047,7 @@
         </div>
         <div class="img-col">
           <div class="s6-pan-wrap">
-            <img id="s6-img" src="img/vshale_boreas.png" alt="Vshale Boreas-1" class="s6-pan-img"
+            <img id="s6-img" src="img/vshale_boreas_annotated.jpg" alt="Vshale Boreas-1" class="s6-pan-img"
               style="max-height:300px; object-fit:contain; background:#fff;">
           </div>
           <div class="img-caption">Perfil real Vshale &ndash; Boreas-1<br><em>GR normalizado &rarr; Larionov &rarr;
@@ -1047,7 +1058,7 @@
         <div class="img-caption" style="margin-bottom:6px;">Perfiles reales (datos NOPIMS &ndash; Subcuenca Caswell):
         </div>
         <div class="vshale-gallery">
-          <div class="img-col"><img src="img/vshale_boreas.png" alt="Boreas-1">
+          <div class="img-col"><img src="img/vshale_boreas_annotated.jpg" alt="Boreas-1">
             <div class="img-caption">Boreas-1</div>
           </div>
           <div class="img-col"><img src="img/vshale_poseidon.png" alt="Poseidon-1">
@@ -1062,7 +1073,7 @@
 
     <!-- -- SLIDE 7: MODELO 3D -- -->
     <section class="slide slide-07"
-      data-notes="El resultado t&eacute;cnico central es el modelo IDW anisotr&oacute;fico. El factor de anisotrop&iacute;a de 0.05 en el eje Z fuerza al algoritmo a priorizar la continuidad LATERAL sobre la vertical, imitando la estratificaci&oacute;n natural de la cuenca sedimentaria y evitando artefactos visuales conocidos como 'ojos de buey'. La visualizaci&oacute;n con PyVista permite cortes e isosuperficies interactivas.">
+      data-notes="El resultado t&eacute;cnico central es el modelo IDW anisotr&oacute;pico. El factor de anisotrop&iacute;a de 0.05 en el eje Z fuerza al algoritmo a priorizar la continuidad LATERAL sobre la vertical, imitando la estratificaci&oacute;n natural de la cuenca sedimentaria y evitando artefactos visuales conocidos como 'ojos de buey'. La visualizaci&oacute;n con PyVista permite cortes e isosuperficies interactivas.">
       <div class="badge">Resultados &ndash; Modelo 3D</div>
       <h2 class="slide-title">Interpolaci&oacute;n IDW + Visualizaci&oacute;n 3D</h2>
       <div class="grid-2">
@@ -1076,7 +1087,7 @@
           </ul>
         </div>
         <div class="card">
-          <div class="card-title">&#128506; IDW Anisotr&oacute;fico</div>
+          <div class="card-title">&#128506; IDW Anisotr&oacute;pico</div>
           <ul class="bullets">
             <li>Malla estructurada (<code>StructuredGrid</code>) X&ndash;Y&ndash;Z</li>
             <li>Factor de anisotrop&iacute;a: <code>0.05 en Z</code> &mdash; fuerza continuidad <strong>lateral</strong>
@@ -1103,12 +1114,12 @@
       <div
         style="display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:1260px; width:100%; margin-top:14px; align-items:start;">
         <div class="img-col">
-          <img src="img/model_3d_slide7.jpg" class="slide-img anim-gentle-zoom" alt="Modelo 3D Bloque Poseidon"
+          <img src="img/model_3d_slide7.jpg" class="slide-img kb-gentle" alt="Modelo 3D Bloque Poseidon"
             style="max-height:240px; object-fit:contain; animation-delay:0s;">
           <div class="img-caption">Modelo 3D &ndash; vista lateral · Bloque Poseidon · IDW Z=0.05</div>
         </div>
         <div class="img-col">
-          <img src="img/vshale_poseidon.png" alt="Vshale Poseidon-1" class="anim-gentle-zoom"
+          <img src="img/vshale_poseidon.png" alt="Vshale Poseidon-1" class="kb-gentle"
             style="width:100%; max-height:240px; object-fit:contain; background:#fff; border-radius:10px; border:1px solid rgba(255,255,255,0.08); animation-delay:4.5s;">
           <div class="img-caption">Perfil 1D de entrada &ndash; Poseidon-1<br><em>Curva Vshale Larionov · congruencia
               con el modelo 3D</em></div>
@@ -1193,7 +1204,7 @@
 
     <!-- -- SLIDE 9: CONCLUSIONES -- -->
     <section class="slide slide-09"
-      data-notes="Las conclusiones est&aacute;n directamente amarradas a cada objetivo espec&iacute;fico. OE1 se resolvi&oacute; con el preprocesamiento (.LAS&rarr;CSV). OE2 con el c&aacute;lculo Larionov. OE3 con el modelo IDW anisotr&oacute;fico. OE4 con el OVA y los 7 videos. Las recomendaciones apuntan a la siguiente fase: validaci&oacute;n con estudiantes, integraci&oacute;n s&iacute;smica y desarrollo de un visualizador interactivo.">
+      data-notes="Las conclusiones est&aacute;n directamente amarradas a cada objetivo espec&iacute;fico. OE1 se resolvi&oacute; con el preprocesamiento (.LAS&rarr;CSV). OE2 con el c&aacute;lculo Larionov. OE3 con el modelo IDW anisotr&oacute;pico. OE4 con el OVA y los 7 videos. Las recomendaciones apuntan a la siguiente fase: validaci&oacute;n con estudiantes, integraci&oacute;n s&iacute;smica y desarrollo de un visualizador interactivo.">
       <div class="badge">Conclusiones</div>
       <h2 class="slide-title">Conclusiones y Recomendaciones</h2>
       <div class="grid-2">
@@ -1348,9 +1359,9 @@
     function startSlide3Anim() {
       const img = document.getElementById('s3-model');
       if (!img) return;
-      img.style.animation = 'none';
-      img.offsetHeight; // reflow
-      img.style.animation = 'slowZoom 12s ease-in-out forwards';
+      img.classList.remove('kb-slow'); img.classList.add('_tmp');
+      img.offsetHeight;
+      img.classList.remove('_tmp'); img.classList.add('kb-slow');
     }
 
     function startSlide6Pan() {
@@ -1509,8 +1520,7 @@
         drawContours();
         requestAnimationFrame(frame);
       }
-      requestAnimationFrame(frame);
-    })();
+      requestAnimationFrame(frame);   })();
   </script>
 </body>
 
