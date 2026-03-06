@@ -1023,7 +1023,8 @@
       <h2 class="slide-title">C&aacute;lculo del Vshale</h2>
       <div
         style="display:grid; grid-template-columns:1fr 1.2fr; gap:32px; max-width:1260px; width:100%; align-items:center;">
-        <div id="s6-content" style="display:flex; flex-direction:column; justify-content:center; gap:20px; transition: opacity 0.4s ease;">
+        <div id="s6-content"
+          style="display:flex; flex-direction:column; justify-content:center; gap:20px; transition: opacity 0.4s ease;">
           <div class="card">
             <div class="card-title">&#128229; Flujo de Trabajo</div>
             <ul class="bullets">
@@ -1071,72 +1072,79 @@
       <h2 class="slide-title">Interpolaci&oacute;n IDW + Visualizaci&oacute;n 3D</h2>
       <div id="s7-content" style="transition: opacity 0.4s ease;">
         <div class="grid-2">
-        <div class="card">
-          <div class="card-title">&#9642; Segmentaci&oacute;n Litol&oacute;gica (Blocking)</div>
-          <ul class="bullets">
-            <li>Agrupa miles de lecturas en <strong>bloques geol&oacute;gicos</strong> homog&eacute;neos</li>
-            <li>Par&aacute;metros: <code>Window=5</code>, <code>Umbral=0.05</code></li>
-            <li>Reduce ruido el&eacute;ctrico &middot; resalta capas estratigr&aacute;ficas reales</li>
-            <li>Cada bloque recibe un <code>Segmento_ID</code> &uacute;nico</li>
-          </ul>
-        </div>
-        <div class="card">
-          <div class="card-title">&#128506; IDW Anisotr&oacute;pico</div>
-          <ul class="bullets">
-            <li>Malla estructurada (<code>StructuredGrid</code>) X&ndash;Y&ndash;Z</li>
-            <li>Factor de horizontalidad: <code>0.05 en Z</code> &mdash; busca similitud <strong>lateral</strong>
-            </li>
-            <li>Evita artefactos visuales (<strong>&ldquo;ojos de buey&rdquo;</strong>)</li>
-            <li>Sliders para cortes e isosuperficies con PyVista</li>
-          </ul>
-        </div>
+          <div class="card">
+            <div class="card-title">&#9642; Segmentaci&oacute;n Litol&oacute;gica (Blocking)</div>
+            <ul class="bullets">
+              <li>Agrupa miles de lecturas en <strong>bloques geol&oacute;gicos</strong> homog&eacute;neos</li>
+              <li>Par&aacute;metros: <code>Window=5</code>, <code>Umbral=0.05</code></li>
+              <li>Reduce ruido el&eacute;ctrico &middot; resalta capas estratigr&aacute;ficas reales</li>
+              <li>Cada bloque recibe un <code>Segmento_ID</code> &uacute;nico</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">&#128506; IDW Anisotr&oacute;pico</div>
+            <ul class="bullets">
+              <li>Malla estructurada (<code>StructuredGrid</code>) X&ndash;Y&ndash;Z</li>
+              <li>Factor de horizontalidad: <code>0.05 en Z</code> &mdash; busca similitud <strong>lateral</strong>
+              </li>
+              <li>Evita artefactos visuales (<strong>&ldquo;ojos de buey&rdquo;</strong>)</li>
+              <li>Sliders para cortes e isosuperficies con PyVista</li>
+            </ul>
+          </div>
         </div>
         <div class="stats-row" style="margin-top:18px;">
-        <div class="stat-card">
-          <div class="stat-val">3D</div>
-          <div class="stat-label">Modelo volum&eacute;trico interactivo</div>
+          <div class="stat-card">
+            <div class="stat-val">3D</div>
+            <div class="stat-label">Modelo volum&eacute;trico interactivo</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val">Z=0.05</div>
+            <div class="stat-label">Factor de Horizontalidad</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val">$0</div>
+            <div class="stat-label">Costo de licencias</div>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-val">Z=0.05</div>
-          <div class="stat-label">Factor de Horizontalidad</div>
+        <div id="s7-images"
+          style="display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:1260px; width:100%; margin-top:14px; align-items:start;">
+          <div class="img-col">
+            <img src="img/model_3d_slide7.jpg" alt="Modelo 3D Vshale"
+              style="max-height:240px; object-fit:contain; width:100%; border-radius:8px;">
+            <div class="img-caption">Modelo 3D Vshale &ndash; Poseidon · IDW Z=0.05</div>
+          </div>
+          <div class="img-col">
+            <img src="img/model_3d_gr.jpg" alt="Modelo 3D Gamma Ray"
+              style="max-height:240px; object-fit:contain; width:100%; border-radius:8px;">
+            <div class="img-caption">Modelo 3D Gamma Ray &ndash; Poseidon<br><em>Comparaci&oacute;n de congruencia
+                espacial</em></div>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-val">$0</div>
-          <div class="stat-label">Costo de licencias</div>
-        </div>
-      </div>
-      <div id="s7-images" 
-        style="display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:1260px; width:100%; margin-top:14px; align-items:start;">
-        <div class="img-col">
-          <img src="img/model_3d_slide7.jpg" alt="Modelo 3D Vshale"
-            style="max-height:240px; object-fit:contain; width:100%; border-radius:8px;">
-          <div class="img-caption">Modelo 3D Vshale &ndash; Poseidon · IDW Z=0.05</div>
-        </div>
-        <div class="img-col">
-          <img src="img/model_3d_gr.jpg" alt="Modelo 3D Gamma Ray"
-            style="max-height:240px; object-fit:contain; width:100%; border-radius:8px;">
-          <div class="img-caption">Modelo 3D Gamma Ray &ndash; Poseidon<br><em>Comparaci&oacute;n de congruencia espacial</em></div>
-        </div>
-      </div>
     </section>
 
-    
+
     <!-- -- SLIDE 8: MODELOS CLOSEUP -- -->
     <section class="slide slide-08">
       <div class="badge">Modelos Espaciales de Fase</div>
       <h2 class="slide-title">Visualizaci&oacute;n Detallada 3D</h2>
-      
+
       <div style="display:flex; justify-content:center; gap:20px; align-items:stretch; width:100%; height:75vh;">
-        <div style="flex:1; display:flex; flex-direction:column; background:#1e293b; border-radius:12px; padding:20px; box-shadow:0 10px 25px rgba(0,0,0,0.5); align-items:center;">
-          <img src="img/model_3d_slide7.jpg" alt="Vshale 3D" style="width:100%; height:100%; object-fit:contain; border-radius:8px;">
+        <div
+          style="flex:1; display:flex; flex-direction:column; background:#1e293b; border-radius:12px; padding:20px; box-shadow:0 10px 25px rgba(0,0,0,0.5); align-items:center;">
+          <img src="img/model_3d_slide7.jpg" alt="Vshale 3D"
+            style="width:100%; height:100%; object-fit:contain; border-radius:8px;">
           <div style="font-size:1.1rem; color:#f8fafc; font-weight:bold; margin-top:16px;">Modelo 3D Vshale</div>
-          <div style="font-size:0.9rem; color:#94a3b8; margin-top:4px;">Disociaci&oacute;n estratigr&aacute;fica con Z=0.05</div>
+          <div style="font-size:0.9rem; color:#94a3b8; margin-top:4px;">Disociaci&oacute;n estratigr&aacute;fica con
+            Z=0.05</div>
         </div>
-        
-        <div style="flex:1; display:flex; flex-direction:column; background:#1e293b; border-radius:12px; padding:20px; box-shadow:0 10px 25px rgba(0,0,0,0.5); align-items:center;">
-          <img src="img/model_3d_gr.jpg" alt="Gamma Ray 3D" style="width:100%; height:100%; object-fit:contain; border-radius:8px;">
+
+        <div
+          style="flex:1; display:flex; flex-direction:column; background:#1e293b; border-radius:12px; padding:20px; box-shadow:0 10px 25px rgba(0,0,0,0.5); align-items:center;">
+          <img src="img/model_3d_gr.jpg" alt="Gamma Ray 3D"
+            style="width:100%; height:100%; object-fit:contain; border-radius:8px;">
           <div style="font-size:1.1rem; color:#f8fafc; font-weight:bold; margin-top:16px;">Modelo 3D Gamma Ray</div>
-          <div style="font-size:0.9rem; color:#94a3b8; margin-top:4px;">Comparaci&oacute;n de contingencia lito-espacial</div>
+          <div style="font-size:0.9rem; color:#94a3b8; margin-top:4px;">Comparaci&oacute;n de contingencia lito-espacial
+          </div>
         </div>
       </div>
     </section>
@@ -1148,73 +1156,75 @@
       <h2 class="slide-title">El Recurso Educativo</h2>
       <div id="s7-content" style="transition: opacity 0.4s ease;">
         <div class="grid-2">
-        <div class="card">
-          <div class="card-title">&#128193; Componentes del OVA</div>
-          <ul class="bullets">
-            <li>&#128100; Presentador digital en videos narrados</li>
-            <li>&#128214; Manual t&eacute;cnico paso a paso</li>
-            <li>&#128104;&#8205;&#128187; Repositorio GitHub &mdash; c&oacute;digo abierto MIT</li>
-          </ul>
-          <div class="card-title" style="margin-top:14px;">&#128204; Resultados de Aprendizaje</div>
-          <ul class="bullets">
-            <li>Entiende el flujo de datos LAS &rarr; Modelo 3D</li>
-            <li>Elabora modelos estratigr&aacute;ficamente coherentes</li>
-            <li>Opera herramientas Open Source sin licencias comerciales</li>
-          </ul>
-          <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;">
-            <a class="link-btn" href="https://github.com/Picott/InputsTesis" target="_blank">&#128193; GitHub &ndash;
-              InputsTesis</a>
-            <a class="link-btn purple"
-              href="file:///C:/Users/juand/Desktop/TESIS%20FINAL%20SEGMENT/03-03-2026%20INFORME%20FINAL%20DE%20TRABAJO%20DE%20GRADO.pdf"
-              target="_blank">&#128196; Informe Final PDF</a>
+          <div class="card">
+            <div class="card-title">&#128193; Componentes del OVA</div>
+            <ul class="bullets">
+              <li>&#128100; Presentador digital en videos narrados</li>
+              <li>&#128214; Manual t&eacute;cnico paso a paso</li>
+              <li>&#128104;&#8205;&#128187; Repositorio GitHub &mdash; c&oacute;digo abierto MIT</li>
+            </ul>
+            <div class="card-title" style="margin-top:14px;">&#128204; Resultados de Aprendizaje</div>
+            <ul class="bullets">
+              <li>Entiende el flujo de datos LAS &rarr; Modelo 3D</li>
+              <li>Elabora modelos estratigr&aacute;ficamente coherentes</li>
+              <li>Opera herramientas Open Source sin licencias comerciales</li>
+            </ul>
+            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;">
+              <a class="link-btn" href="https://github.com/Picott/InputsTesis" target="_blank">&#128193; GitHub &ndash;
+                InputsTesis</a>
+              <a class="link-btn purple"
+                href="file:///C:/Users/juand/Desktop/TESIS%20FINAL%20SEGMENT/03-03-2026%20INFORME%20FINAL%20DE%20TRABAJO%20DE%20GRADO.pdf"
+                target="_blank">&#128196; Informe Final PDF</a>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; padding-left:4px;">
+              <div class="card-title" style="margin-bottom:0; color:#f59e0b;">&#127916; Serie de Videos (7
+                m&oacute;dulos)
+              </div>
+              <a class="link-btn green" href="https://youtube.com/playlist?list=PLEtE0tRZvd3OUso5G2yexPzwRnT91e63I"
+                target="_blank">&#9654; Ver Playlist</a>
+            </div>
+            <div class="video-list">
+              <div class="video-item">
+                <div class="video-num">1</div>
+                <div class="video-text">Introducci&oacute;n al Proyecto y al Concepto de Vshale <span
+                    style="color:var(--muted); font-size:0.75rem;">&middot; 3:39</span></div>
+              </div>
+              <div class="video-item">
+                <div class="video-num">2</div>
+                <div class="video-text">Procesamiento y normalizaci&oacute;n de archivos .LAS <span
+                    style="color:var(--muted); font-size:0.75rem;">&middot; 2:19</span></div>
+              </div>
+              <div class="video-item">
+                <div class="video-num">3</div>
+                <div class="video-text">C&aacute;lculo del Vshale utilizando la Ecuaci&oacute;n de Larionov <span
+                    style="color:var(--muted); font-size:0.75rem;">&middot; 1:46</span></div>
+              </div>
+              <div class="video-item">
+                <div class="video-num">4</div>
+                <div class="video-text">Segmentaci&oacute;n Litol&oacute;gica por Umbral <span
+                    style="color:var(--muted); font-size:0.75rem;">&middot; 2:11</span></div>
+              </div>
+              <div class="video-item">
+                <div class="video-num">5</div>
+                <div class="video-text">Construcci&oacute;n de la Malla Estructurada y Aplicaci&oacute;n de
+                  Interpolaci&oacute;n IDW <span style="color:var(--muted); font-size:0.75rem;">&middot; 2:11</span>
+                </div>
+              </div>
+              <div class="video-item">
+                <div class="video-num">6</div>
+                <div class="video-text">Visualizaci&oacute;n 3D con PyVista <span
+                    style="color:var(--muted); font-size:0.75rem;">&middot; 2:16</span></div>
+              </div>
+              <div class="video-item">
+                <div class="video-num">7</div>
+                <div class="video-text">Conclusiones y Aplicaciones del Modelo <span
+                    style="color:var(--muted); font-size:0.75rem;">&middot; 1:50</span></div>
+              </div>
+            </div>
           </div>
         </div>
-        <div style="display:flex; flex-direction:column; gap:10px;">
-          <div style="display:flex; align-items:center; justify-content:space-between; padding-left:4px;">
-            <div class="card-title" style="margin-bottom:0; color:#f59e0b;">&#127916; Serie de Videos (7 m&oacute;dulos)
-            </div>
-            <a class="link-btn green" href="https://youtube.com/playlist?list=PLEtE0tRZvd3OUso5G2yexPzwRnT91e63I"
-              target="_blank">&#9654; Ver Playlist</a>
-          </div>
-          <div class="video-list">
-            <div class="video-item">
-              <div class="video-num">1</div>
-              <div class="video-text">Introducci&oacute;n al Proyecto y al Concepto de Vshale <span
-                  style="color:var(--muted); font-size:0.75rem;">&middot; 3:39</span></div>
-            </div>
-            <div class="video-item">
-              <div class="video-num">2</div>
-              <div class="video-text">Procesamiento y normalizaci&oacute;n de archivos .LAS <span
-                  style="color:var(--muted); font-size:0.75rem;">&middot; 2:19</span></div>
-            </div>
-            <div class="video-item">
-              <div class="video-num">3</div>
-              <div class="video-text">C&aacute;lculo del Vshale utilizando la Ecuaci&oacute;n de Larionov <span
-                  style="color:var(--muted); font-size:0.75rem;">&middot; 1:46</span></div>
-            </div>
-            <div class="video-item">
-              <div class="video-num">4</div>
-              <div class="video-text">Segmentaci&oacute;n Litol&oacute;gica por Umbral <span
-                  style="color:var(--muted); font-size:0.75rem;">&middot; 2:11</span></div>
-            </div>
-            <div class="video-item">
-              <div class="video-num">5</div>
-              <div class="video-text">Construcci&oacute;n de la Malla Estructurada y Aplicaci&oacute;n de
-                Interpolaci&oacute;n IDW <span style="color:var(--muted); font-size:0.75rem;">&middot; 2:11</span></div>
-            </div>
-            <div class="video-item">
-              <div class="video-num">6</div>
-              <div class="video-text">Visualizaci&oacute;n 3D con PyVista <span
-                  style="color:var(--muted); font-size:0.75rem;">&middot; 2:16</span></div>
-            </div>
-            <div class="video-item">
-              <div class="video-num">7</div>
-              <div class="video-text">Conclusiones y Aplicaciones del Modelo <span
-                  style="color:var(--muted); font-size:0.75rem;">&middot; 1:50</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
 
     <!-- -- SLIDE 10: CONCLUSIONES -- -->
@@ -1224,34 +1234,34 @@
       <h2 class="slide-title">Conclusiones y Recomendaciones</h2>
       <div id="s7-content" style="transition: opacity 0.4s ease;">
         <div class="grid-2">
-        <div class="card">
-          <div class="card-title">&#9989; Logros &ndash; alineados a objetivos</div>
-          <ul class="bullets">
-            <li><span class="highlight-blue">OE1</span> &rarr; Preprocesamiento 8 pozos NOPIMS en Python, 0 licencias
-            </li>
-            <li><span class="highlight-green">OE2</span> &rarr; Vshale Larionov terciario validado vs. GR crudo</li>
-            <li><span class="highlight-gold">OE3</span> &rarr; Modelo IDW anisotr&oacute;pico (Z=0.05) sin artefactos
-              visuales</li>
-            <li><span class="highlight-purple">OE4</span> &rarr; OVA con avatar digital, manual y 7 videos en YouTube
-            </li>
-          </ul>
+          <div class="card">
+            <div class="card-title">&#9989; Logros &ndash; alineados a objetivos</div>
+            <ul class="bullets">
+              <li><span class="highlight-blue">OE1</span> &rarr; Preprocesamiento 8 pozos NOPIMS en Python, 0 licencias
+              </li>
+              <li><span class="highlight-green">OE2</span> &rarr; Vshale Larionov terciario validado vs. GR crudo</li>
+              <li><span class="highlight-gold">OE3</span> &rarr; Modelo IDW anisotr&oacute;pico (Z=0.05) sin artefactos
+                visuales</li>
+              <li><span class="highlight-purple">OE4</span> &rarr; OVA con avatar digital, manual y 7 videos en YouTube
+              </li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">&#128302; Recomendaciones y Trabajo Futuro</div>
+            <ul class="bullets" style="font-size:0.82rem; line-height:1.5;">
+              <li>Implementar OVA como <strong>taller oficial</strong> en Geoestad&iacute;stica, Modelamiento de
+                Yacimientos y Petrof&iacute;sica (UIS)</li>
+              <li>Explorar <strong>Kriging</strong> como alternativa a IDW y comparar resultados</li>
+              <li>Incorporar m&oacute;dulos de <strong>porosidad y permeabilidad</strong> en iteraciones futuras</li>
+              <li><strong>Integrar datos s&iacute;smicos</strong> para correlacionar modelo petrof&iacute;sico con
+                estructura geol&oacute;gica</li>
+              <li>Desarrollar <strong>visualizador web interactivo</strong> (PyVista Trame/Panel) para eliminar
+                instalaci&oacute;n local</li>
+              <li>Realizar <strong>pruebas piloto</strong> con estudiantes para medir retenci&oacute;n del conocimiento
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="card">
-          <div class="card-title">&#128302; Recomendaciones y Trabajo Futuro</div>
-          <ul class="bullets" style="font-size:0.82rem; line-height:1.5;">
-            <li>Implementar OVA como <strong>taller oficial</strong> en Geoestad&iacute;stica, Modelamiento de
-              Yacimientos y Petrof&iacute;sica (UIS)</li>
-            <li>Explorar <strong>Kriging</strong> como alternativa a IDW y comparar resultados</li>
-            <li>Incorporar m&oacute;dulos de <strong>porosidad y permeabilidad</strong> en iteraciones futuras</li>
-            <li><strong>Integrar datos s&iacute;smicos</strong> para correlacionar modelo petrof&iacute;sico con
-              estructura geol&oacute;gica</li>
-            <li>Desarrollar <strong>visualizador web interactivo</strong> (PyVista Trame/Panel) para eliminar
-              instalaci&oacute;n local</li>
-            <li>Realizar <strong>pruebas piloto</strong> con estudiantes para medir retenci&oacute;n del conocimiento
-            </li>
-          </ul>
-        </div>
-      </div>
     </section>
 
     <!-- -- SLIDE 10: GRACIAS / Q&A -- -->
@@ -1307,6 +1317,11 @@
     let current = 0;
     let notesVisible = false;
 
+    // ── SLIDE CONSTANTS ──────────────────────────────────────
+    const SLIDE3 = 2;
+    const SLIDE6 = 5;
+    let zoomStates = { [SLIDE3]: false, [SLIDE6]: false };
+
     // Build dots
     const dotsEl = document.getElementById('dots');
     slides.forEach((_, i) => {
@@ -1333,17 +1348,17 @@
     function goTo(index, fromDir = 1) {
       // Revert any active zoom states when navigating away
       let affectedSlides = [
-        {idx: SLIDE3, content: 's3-content', model: 's3-model'},
-        {idx: SLIDE6, content: 's6-content', model: 's6-model'},
-        {idx: SLIDE7, content: 's7-content', model: 's7-images'}
+        { idx: SLIDE3, content: 's3-content', model: 's3-model' },
+        { idx: SLIDE6, content: 's6-content', model: 's6-model' },
+        { idx: SLIDE7, content: 's7-content', model: 's7-images' }
       ];
-      
+
       affectedSlides.forEach(s => {
         if (current === s.idx && index !== s.idx) {
           zoomStates[s.idx] = false;
-          if(document.getElementById(s.content)) document.getElementById(s.content).style.opacity = '1';
-                   let zClass = 's3-zoomed';
-          if(document.getElementById(s.model)) document.getElementById(s.model).classList.remove(zClass);
+          if (document.getElementById(s.content)) document.getElementById(s.content).style.opacity = '1';
+          let zClass = 's3-zoomed';
+          if (document.getElementById(s.model)) document.getElementById(s.model).classList.remove(zClass);
         }
       });
 
@@ -1364,8 +1379,8 @@
     function changeSlide(dir) {
       // Sub-step zooming for interactive slides
       let zoomableSlides = {
-        [SLIDE3]: {content: 's3-content', model: 's3-model'},
-        [SLIDE6]: {content: 's6-content', model: 's6-model'}
+        [SLIDE3]: { content: 's3-content', model: 's3-model' },
+        [SLIDE6]: { content: 's6-content', model: 's6-model' }
       };
 
       if (zoomableSlides[current]) {
@@ -1404,10 +1419,6 @@
     updateUI();
 
     // ── SLIDE ANIMATION HOOKS ──────────────────────────────────────
-    const SLIDE3 = 2;
-    const SLIDE6 = 5;
-    
-    let zoomStates = { [SLIDE3]: false, [SLIDE6]: false };
 
     // ═══════════════════════════════════════════
     // ANIMATED BACKGROUND: Fluid Gradient + Contour Lines
