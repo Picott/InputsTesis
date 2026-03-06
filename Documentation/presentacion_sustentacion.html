@@ -150,23 +150,18 @@
       width: 100%;
     }
 
-    /* Unclipped POP zoom: Slide 3 – 12s, no overflow hidden, overlays smoothly */
-    @keyframes popZoom {
-      0% {
-        transform: scale(1);
-      }
-
-      100% {
-        transform: scale(1.38) perspective(500px) translateZ(20px);
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-      }
-    }
-
-    .anim-pop-zoom {
-      animation: popZoom 12s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-      transform-origin: center right;
+    /* Interactive Unclipped Zoom: Slide 3 */
+    .s3-model-img {
+      transition: all 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+      transform-origin: right center;
       position: relative;
       z-index: 10;
+    }
+    .s3-zoomed {
+      transform: scale(1.45) translateX(-8%) !important;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9) !important;
+      background: #0b0f1a;
+      border-radius: 12px;
     }
 
 
@@ -897,7 +892,7 @@
       <h2 class="slide-title">&iquest;Qu&eacute; se propuso?</h2>
       <div
         style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; max-width:1260px; width:100%; align-items:start;">
-        <div style="display:flex; flex-direction:column; gap:14px;">
+        <div id="s3-content" style="display:flex; flex-direction:column; gap:14px; transition: opacity 0.4s ease;">
           <div class="card">
             <div class="card-title">&#127919; Objetivo General</div>
             <p style="color:var(--muted); font-size:0.82rem; line-height:1.6;">Desarrollar un <strong>OVA</strong> que
@@ -919,7 +914,7 @@
           </div>
         </div>
         <div class="img-col" style="grid-column: span 2;">
-          <img id="s3-model" src="img/model_3d_real.jpg" class="anim-pop-zoom slide-img"
+          <img id="s3-model" src="img/model_3d_real.jpg" class="s3-model-img slide-img"
             alt="Modelo 3D final del proyecto" style="max-height:360px; object-fit:contain; width:100%;">
           <div class="img-caption" style="margin-top:24px;">Resultado final: Modelo 3D de Vshale &ndash; Subcuenca
             Caswell (IDW
@@ -1312,6 +1307,13 @@
     }
 
     function goTo(index, fromDir = 1) {
+      // Revert Slide 3 zoom state when navigating away
+      if (current === SLIDE3 && index !== SLIDE3) {
+        s3ZoomState = false;
+        document.getElementById('s3-content').style.opacity = '1';
+        document.getElementById('s3-model').classList.remove('s3-zoomed');
+      }
+
       if (index < 0 || index >= total || index === current) return;
       slides[current].classList.remove('active');
       slides[current].classList.add('exit');
@@ -1322,13 +1324,26 @@
       setTimeout(() => {
         slides[current].style.transform = '';
         slides[current].classList.add('active');
-        // ── Per-slide animations ──
-        if (current === SLIDE3) startSlide3Anim();
       }, 10);
       updateUI();
     }
 
     function changeSlide(dir) {
+      // Sub-step zooming for Slide 3
+      if (current === SLIDE3) {
+        if (dir === 1 && !s3ZoomState) {
+          s3ZoomState = true;
+          document.getElementById('s3-content').style.opacity = '0';
+          document.getElementById('s3-model').classList.add('s3-zoomed');
+          return;
+        }
+        if (dir === -1 && s3ZoomState) {
+          s3ZoomState = false;
+          document.getElementById('s3-content').style.opacity = '1';
+          document.getElementById('s3-model').classList.remove('s3-zoomed');
+          return;
+        }
+      }
       goTo(current + dir, dir);
     }
 
@@ -1347,19 +1362,8 @@
     updateUI();
 
     // ── SLIDE ANIMATION HOOKS ──────────────────────────────────────
-    // Slide index (0-based): Slide 3 = index 2
     const SLIDE3 = 2;
-
-    function startSlide3Anim() {
-      const img = document.getElementById('s3-model');
-      if (!img) return;
-      img.classList.remove('anim-pop-zoom');
-      void img.offsetHeight; // reflow to restart css animation
-      img.classList.add('anim-pop-zoom');
-    }
-
-    // Fire animation for initial slide
-    if (current === SLIDE3) startSlide3Anim();
+    let s3ZoomState = false;
 
     // ═══════════════════════════════════════════
     // ANIMATED BACKGROUND: Fluid Gradient + Contour Lines
