@@ -917,7 +917,7 @@
       <div class="badge">Marco Metodol&oacute;gico</div>
       <h2 class="slide-title">Enfoque Pedagógico y Flujo Técnico</h2>
       <div
-        style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; max-width:1260px; width:100%; align-items:start;">
+        style="display:grid; grid-template-columns:1fr 1.6fr 1fr; gap:18px; max-width:1260px; width:100%; align-items:start;">
         <div class="card">
           <div class="card-title">&#128218; Secuencia Did&aacute;ctica (Constructivismo)</div>
           <ul class="bullets">
@@ -959,7 +959,8 @@
       <div
         style="display:grid; grid-template-columns:1fr 1fr; gap:18px; max-width:1260px; width:100%; align-items:start;">
         <div>
-          <div class="formula-box">Vshale = 0.083 &times; (2<sup>3.7 &times; GR<sub>norm</sub></sup> &minus; 1) &nbsp;
+          <div class="formula-box" style="font-size:0.85rem;">Vshale = 0.083 &times; (2<sup>3.7 &times;
+              GR<sub>norm</sub></sup> &minus; 1) &nbsp;
             [Larionov &ndash; Terciario]</div>
           <div class="grid-2" style="width:100%; margin-top:12px;">
             <div class="card">
@@ -982,23 +983,23 @@
           </div>
         </div>
         <div class="img-col">
-          <img src="img/well_log.png" class="slide-img" alt="Well Log GR y Vshale"
-            style="max-height:300px; object-fit:contain;">
-          <div class="img-caption">Registro GR &rarr; c&aacute;lculo Vshale (Larionov) &rarr; columna litol&oacute;gica
-          </div>
+          <img src="img/vshale_boreas.png" alt="Vshale Boreas-1"
+            style="width:100%; max-height:280px; object-fit:contain; background:#fff; border-radius:10px; border:1px solid rgba(255,255,255,0.08);">
+          <div class="img-caption">Perfil real Vshale &ndash; Boreas-1<br><em>GR normalizado &rarr; Larionov &rarr;
+              curva 0&ndash;1</em></div>
         </div>
       </div>
-      <div style="margin-top:14px; max-width:1260px; width:100%;">
-        <div class="img-caption" style="margin-bottom:6px; font-size:0.75rem;">Perfiles reales de Vshale (datos NOPIMS
-          &ndash; Subcuenca Caswell):</div>
+      <div style="margin-top:12px; max-width:1260px; width:100%;">
+        <div class="img-caption" style="margin-bottom:6px;">Perfiles reales (datos NOPIMS &ndash; Subcuenca Caswell):
+        </div>
         <div class="vshale-gallery">
-          <div class="img-col"><img src="img/vshale_boreas.png" alt="Boreas_1 Vshale">
+          <div class="img-col"><img src="img/vshale_boreas.png" alt="Boreas-1">
             <div class="img-caption">Boreas-1</div>
           </div>
-          <div class="img-col"><img src="img/vshale_poseidon.png" alt="Poseidon_1 Vshale">
+          <div class="img-col"><img src="img/vshale_poseidon.png" alt="Poseidon-1">
             <div class="img-caption">Poseidon-1</div>
           </div>
-          <div class="img-col"><img src="img/vshale_proteus.png" alt="Proteus_1 Vshale">
+          <div class="img-col"><img src="img/vshale_proteus.png" alt="Proteus-1">
             <div class="img-caption">Proteus-1</div>
           </div>
         </div>
@@ -1045,11 +1046,19 @@
           <div class="stat-label">Costo de licencias</div>
         </div>
       </div>
-      <div class="img-col" style="margin-top:14px; max-width:1260px; width:100%;">
-        <img src="img/model_3d_real.png" class="slide-img" alt="Modelo 3D real del proyecto"
-          style="max-height:260px; object-fit:contain;">
-        <div class="img-caption">Modelo 3D real del proyecto &ndash; 462 bloques geol&oacute;gicos, IDW
-          anisotr&oacute;fico (factor Z=0.05), cortes X/Y interactivos &ndash; PyVista</div>
+      <div
+        style="display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:1260px; width:100%; margin-top:14px; align-items:start;">
+        <div class="img-col">
+          <img src="img/model_3d_slide7.png" class="slide-img" alt="Modelo 3D Bloque Poseidon"
+            style="max-height:240px; object-fit:contain;">
+          <div class="img-caption">Modelo 3D &ndash; vista lateral · Bloque Poseidon · IDW Z=0.05</div>
+        </div>
+        <div class="img-col">
+          <img src="img/vshale_poseidon.png" alt="Vshale Poseidon-1"
+            style="width:100%; max-height:240px; object-fit:contain; background:#fff; border-radius:10px; border:1px solid rgba(255,255,255,0.08);">
+          <div class="img-caption">Perfil 1D de entrada &ndash; Poseidon-1<br><em>Curva Vshale Larionov · congruencia
+              con el modelo 3D</em></div>
+        </div>
       </div>
     </section>
 
@@ -1148,15 +1157,15 @@
         </div>
         <div class="card">
           <div class="card-title">&#128302; Recomendaciones y Trabajo Futuro</div>
-          <ul class="bullets">
-            <li>Implementar el OVA como <strong>taller oficial</strong> en Geoestadística, Modelamiento de Yacimientos y
-              Petrofísica (UIS)</li>
-            <li>Explorar m&eacute;todos alternativos (<strong>Kriging</strong>) y comparar con IDW</li>
+          <ul class="bullets" style="font-size:0.82rem; line-height:1.5;">
+            <li>Implementar OVA como <strong>taller oficial</strong> en Geoestad&iacute;stica, Modelamiento de
+              Yacimientos y Petrof&iacute;sica (UIS)</li>
+            <li>Explorar <strong>Kriging</strong> como alternativa a IDW y comparar resultados</li>
             <li>Incorporar m&oacute;dulos de <strong>porosidad y permeabilidad</strong> en iteraciones futuras</li>
-            <li><strong>Integrar datos s&iacute;smicos</strong> para correlacionar el modelo petrofísico con la
-              estructura estructural</li>
-            <li>Desarrollar un <strong>visualizador interactivo web</strong> (e.g. PyVista Trame / Panel) para
-              reemplazar la instalaci&oacute;n local</li>
+            <li><strong>Integrar datos s&iacute;smicos</strong> para correlacionar modelo petrof&iacute;sico con
+              estructura geol&oacute;gica</li>
+            <li>Desarrollar <strong>visualizador web interactivo</strong> (PyVista Trame/Panel) para eliminar
+              instalaci&oacute;n local</li>
             <li>Realizar <strong>pruebas piloto</strong> con estudiantes para medir retenci&oacute;n del conocimiento
             </li>
           </ul>
@@ -1178,20 +1187,30 @@
         inquietudes.</p>
       <div class="grid-3" style="margin-top:36px; max-width:800px;">
         <a class="icon-card" href="https://github.com/Picott/InputsTesis" target="_blank" style="text-decoration:none;">
-          <div class="icon">📁</div>
-          <div class="ic-title">Código</div>
-          <div class="ic-desc">GitHub · InputsTesis-main · MIT License</div>
+          <div class="icon">
+            <svg viewBox="0 0 24 24" width="52" height="52" fill="white" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
+            </svg>
+          </div>
+          <div class="ic-title">C&oacute;digo</div>
+          <div class="ic-desc">GitHub &middot; InputsTesis-main &middot; MIT License</div>
         </a>
         <a class="icon-card" href="https://youtube.com/playlist?list=PLEtE0tRZvd3OUso5G2yexPzwRnT91e63I" target="_blank"
           style="text-decoration:none;">
-          <div class="icon">🎬</div>
+          <div class="icon">
+            <svg viewBox="0 0 24 24" width="52" height="52" xmlns="http://www.w3.org/2000/svg">
+              <path fill="#FF0000"
+                d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+            </svg>
+          </div>
           <div class="ic-title">Videos</div>
-          <div class="ic-desc">Serie de 7 módulos en YouTube</div>
+          <div class="ic-desc">Serie de 7 m&oacute;dulos en YouTube</div>
         </a>
         <a class="icon-card"
           href="file:///C:/Users/juand/Desktop/TESIS%20FINAL%20SEGMENT/03-03-2026%20INFORME%20FINAL%20DE%20TRABAJO%20DE%20GRADO.pdf"
           target="_blank" style="text-decoration:none;">
-          <div class="icon">📄</div>
+          <div class="icon">&#128218;&#127891;</div>
           <div class="ic-title">Documento</div>
           <div class="ic-desc">Informe Final de Trabajo de Grado</div>
         </a>
