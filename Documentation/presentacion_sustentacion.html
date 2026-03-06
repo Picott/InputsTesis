@@ -1023,7 +1023,7 @@
       <h2 class="slide-title">C&aacute;lculo del Vshale</h2>
       <div
         style="display:grid; grid-template-columns:1fr 1.2fr; gap:32px; max-width:1260px; width:100%; align-items:center;">
-        <div style="display:flex; flex-direction:column; justify-content:center; gap:20px;">
+        <div id="s6-content" style="display:flex; flex-direction:column; justify-content:center; gap:20px; transition: opacity 0.4s ease;">
           <div class="card">
             <div class="card-title">&#128229; Flujo de Trabajo</div>
             <ul class="bullets">
@@ -1056,7 +1056,7 @@
           </div>
         </div>
         <div class="img-col">
-          <img src="img/vshale_boreas_log.jpg" alt="Vshale Boreas-1" class="slide-img kb-gentle"
+          <img id="s6-model" src="img/vshale_boreas_log.jpg" alt="Vshale Boreas-1" class="slide-img s3-model-img"
             style="width:100%; max-height:480px; object-fit:contain; border-radius:12px; border:1px solid rgba(255,255,255,0.08);">
           <div class="img-caption" style="margin-top:14px; text-align:center;">Perfil real Vshale &ndash;
             Boreas-1<br><em>Zonas litol&oacute;gicas coloreadas bajo criterio petrof&iacute;sico</em></div>
@@ -1069,7 +1069,8 @@
       data-notes="El resultado t&eacute;cnico central es el modelo IDW anisotr&oacute;pico. El factor de anisotrop&iacute;a de 0.05 en el eje Z fuerza al algoritmo a priorizar la continuidad LATERAL sobre la vertical, imitando la estratificaci&oacute;n natural de la cuenca sedimentaria y evitando artefactos visuales conocidos como 'ojos de buey'. La visualizaci&oacute;n con PyVista permite cortes e isosuperficies interactivas.">
       <div class="badge">Resultados &ndash; Modelo 3D</div>
       <h2 class="slide-title">Interpolaci&oacute;n IDW + Visualizaci&oacute;n 3D</h2>
-      <div class="grid-2">
+      <div id="s7-content" style="transition: opacity 0.4s ease;">
+        <div class="grid-2">
         <div class="card">
           <div class="card-title">&#9642; Segmentaci&oacute;n Litol&oacute;gica (Blocking)</div>
           <ul class="bullets">
@@ -1089,8 +1090,8 @@
             <li>Sliders para cortes e isosuperficies con PyVista</li>
           </ul>
         </div>
-      </div>
-      <div class="stats-row" style="margin-top:18px;">
+        </div>
+        <div class="stats-row" style="margin-top:18px;">
         <div class="stat-card">
           <div class="stat-val">3D</div>
           <div class="stat-label">Modelo volum&eacute;trico interactivo</div>
@@ -1104,18 +1105,17 @@
           <div class="stat-label">Costo de licencias</div>
         </div>
       </div>
-      <div
+      <div id="s7-images" class="s3-model-img"
         style="display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:1260px; width:100%; margin-top:14px; align-items:start;">
         <div class="img-col">
-          <img src="img/model_3d_slide7.jpg" class="slide-img kb-gentle" alt="Modelo 3D Bloque Poseidon"
-            style="max-height:240px; object-fit:contain;">
-          <div class="img-caption">Modelo 3D &ndash; vista lateral · Bloque Poseidon · IDW Z=0.05</div>
+          <img src="img/model_3d_slide7.jpg" alt="Modelo 3D Vshale"
+            style="max-height:240px; object-fit:contain; width:100%; border-radius:8px;">
+          <div class="img-caption">Modelo 3D Vshale &ndash; Poseidon · IDW Z=0.05</div>
         </div>
         <div class="img-col">
-          <img src="img/vshale_poseidon.png" alt="Vshale Poseidon-1" class="kb-gentle"
-            style="width:100%; max-height:240px; object-fit:contain; background:#fff; border-radius:10px; border:1px solid rgba(255,255,255,0.08);">
-          <div class="img-caption">Perfil 1D de entrada &ndash; Poseidon-1<br><em>Curva Vshale Larionov · congruencia
-              con el modelo 3D</em></div>
+          <img src="img/model_3d_gr.jpg" alt="Modelo 3D Gamma Ray"
+            style="max-height:240px; object-fit:contain; width:100%; border-radius:8px;">
+          <div class="img-caption">Modelo 3D Gamma Ray &ndash; Poseidon<br><em>Comparaci&oacute;n de congruencia espacial</em></div>
         </div>
       </div>
     </section>
@@ -1125,7 +1125,8 @@
       data-notes="El producto principal es el OVA: un Objeto Virtual de Aprendizaje con tres componentes — repositorio GitHub, manual t&eacute;cnico y serie de 7 videos narrados por un presentador digital. Los videos muestran el c&oacute;digo en ejecuci&oacute;n y lo que el estudiante debe ir obteniendo. El OVA est&aacute; pensado como laboratorio virtual para Geoestadística, Modelamiento de Yacimientos y Petrofísica.">
       <div class="badge">OVA &ndash; Objeto Virtual de Aprendizaje</div>
       <h2 class="slide-title">El Recurso Educativo</h2>
-      <div class="grid-2">
+      <div id="s7-content" style="transition: opacity 0.4s ease;">
+        <div class="grid-2">
         <div class="card">
           <div class="card-title">&#128193; Componentes del OVA</div>
           <ul class="bullets">
@@ -1200,7 +1201,8 @@
       data-notes="Las conclusiones est&aacute;n directamente amarradas a cada objetivo espec&iacute;fico. OE1 se resolvi&oacute; con el preprocesamiento (.LAS&rarr;CSV). OE2 con el c&aacute;lculo Larionov. OE3 con el modelo IDW anisotr&oacute;pico. OE4 con el OVA y los 7 videos. Las recomendaciones apuntan a la siguiente fase: validaci&oacute;n con estudiantes, integraci&oacute;n s&iacute;smica y desarrollo de un visualizador interactivo.">
       <div class="badge">Conclusiones</div>
       <h2 class="slide-title">Conclusiones y Recomendaciones</h2>
-      <div class="grid-2">
+      <div id="s7-content" style="transition: opacity 0.4s ease;">
+        <div class="grid-2">
         <div class="card">
           <div class="card-title">&#9989; Logros &ndash; alineados a objetivos</div>
           <ul class="bullets">
@@ -1308,12 +1310,20 @@
     }
 
     function goTo(index, fromDir = 1) {
-      // Revert Slide 3 zoom state when navigating away
-      if (current === SLIDE3 && index !== SLIDE3) {
-        s3ZoomState = false;
-        document.getElementById('s3-content').style.opacity = '1';
-        document.getElementById('s3-model').classList.remove('s3-zoomed');
-      }
+      // Revert any active zoom states when navigating away
+      let affectedSlides = [
+        {idx: SLIDE3, content: 's3-content', model: 's3-model'},
+        {idx: SLIDE6, content: 's6-content', model: 's6-model'},
+        {idx: SLIDE7, content: 's7-content', model: 's7-images'}
+      ];
+      
+      affectedSlides.forEach(s => {
+        if (current === s.idx && index !== s.idx) {
+          zoomStates[s.idx] = false;
+          if(document.getElementById(s.content)) document.getElementById(s.content).style.opacity = '1';
+          if(document.getElementById(s.model)) document.getElementById(s.model).classList.remove('s3-zoomed');
+        }
+      });
 
       if (index < 0 || index >= total || index === current) return;
       slides[current].classList.remove('active');
@@ -1330,18 +1340,27 @@
     }
 
     function changeSlide(dir) {
-      // Sub-step zooming for Slide 3
-      if (current === SLIDE3) {
-        if (dir === 1 && !s3ZoomState) {
-          s3ZoomState = true;
-          document.getElementById('s3-content').style.opacity = '0';
-          document.getElementById('s3-model').classList.add('s3-zoomed');
+      // Sub-step zooming for interactive slides
+      let zoomableSlides = {
+        [SLIDE3]: {content: 's3-content', model: 's3-model'},
+        [SLIDE6]: {content: 's6-content', model: 's6-model'},
+        [SLIDE7]: {content: 's7-content', model: 's7-images'}
+      };
+
+      if (zoomableSlides[current]) {
+        let s = zoomableSlides[current];
+        if (dir === 1 && !zoomStates[current]) {
+          zoomStates[current] = true;
+          document.getElementById(s.content).style.opacity = '0';
+          document.getElementById(s.content).style.pointerEvents = 'none';
+          document.getElementById(s.model).classList.add('s3-zoomed');
           return;
         }
-        if (dir === -1 && s3ZoomState) {
-          s3ZoomState = false;
-          document.getElementById('s3-content').style.opacity = '1';
-          document.getElementById('s3-model').classList.remove('s3-zoomed');
+        if (dir === -1 && zoomStates[current]) {
+          zoomStates[current] = false;
+          document.getElementById(s.content).style.opacity = '1';
+          document.getElementById(s.content).style.pointerEvents = 'auto';
+          document.getElementById(s.model).classList.remove('s3-zoomed');
           return;
         }
       }
@@ -1364,7 +1383,9 @@
 
     // ── SLIDE ANIMATION HOOKS ──────────────────────────────────────
     const SLIDE3 = 2;
-    let s3ZoomState = false;
+    const SLIDE6 = 5;
+    const SLIDE7 = 6;
+    let zoomStates = { [SLIDE3]: false, [SLIDE6]: false, [SLIDE7]: false };
 
     // ═══════════════════════════════════════════
     // ANIMATED BACKGROUND: Fluid Gradient + Contour Lines
