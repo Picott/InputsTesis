@@ -130,7 +130,7 @@
       width: 100%;
     }
 
-    /* Gentle pulse: Slide 7 – infinite, subtle */
+    /* Gentle pulse: Slide 6 & 7 – infinite, subtle */
     @keyframes kbGentle {
 
       0%,
@@ -139,7 +139,7 @@
       }
 
       50% {
-        transform: scale(1.12) translate(-2%, -1%);
+        transform: scale(1.08) translate(-1%, -1%);
       }
     }
 
@@ -150,18 +150,23 @@
       width: 100%;
     }
 
-    /* Slide 6 pan container — JS drives transform */
-    .s6-pan-wrap {
-      overflow: hidden;
-      border-radius: 12px;
-      width: 100%;
+    /* Unclipped POP zoom: Slide 3 – 12s, no overflow hidden, overlays smoothly */
+    @keyframes popZoom {
+      0% {
+        transform: scale(1);
+      }
+
+      100% {
+        transform: scale(1.38) perspective(500px) translateZ(20px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+      }
     }
 
-    .s6-pan-img {
-      width: 100%;
-      transition: transform 1.8s cubic-bezier(0.45, 0, 0.55, 1);
-      transform-origin: center top;
-      display: block;
+    .anim-pop-zoom {
+      animation: popZoom 12s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+      transform-origin: center right;
+      position: relative;
+      z-index: 10;
     }
 
 
@@ -914,9 +919,10 @@
           </div>
         </div>
         <div class="img-col" style="grid-column: span 2;">
-          <div class="kb-wrap"><img id="s3-model" src="img/model_3d_real.jpg" class="kb-slow"
-            alt="Modelo 3D final del proyecto" style="max-height:340px; object-fit:contain; width:100%;"></div>
-          <div class="img-caption">Resultado final: Modelo 3D de Vshale &ndash; Subcuenca Caswell (IDW
+          <img id="s3-model" src="img/model_3d_real.jpg" class="anim-pop-zoom slide-img"
+            alt="Modelo 3D final del proyecto" style="max-height:360px; object-fit:contain; width:100%;">
+          <div class="img-caption" style="margin-top:24px;">Resultado final: Modelo 3D de Vshale &ndash; Subcuenca
+            Caswell (IDW
             anisotr&oacute;pico, PyVista)</div>
         </div>
       </div>
@@ -1020,53 +1026,44 @@
       <div class="badge">Resultados &ndash; Vshale</div>
       <h2 class="slide-title">C&aacute;lculo del Vshale</h2>
       <div
-        style="display:grid; grid-template-columns:1fr 1fr; gap:18px; max-width:1260px; width:100%; align-items:start;">
-        <div>
-          <div class="formula-box" style="font-size:0.85rem;">Vshale = 0.083 &times; (2<sup>3.7 &times;
-              GR<sub>norm</sub></sup> &minus; 1) &nbsp;
-            [Larionov &ndash; Terciario]</div>
-          <div class="grid-2" style="width:100%; margin-top:12px;">
-            <div class="card">
-              <div class="card-title">&#128229; Proceso</div>
-              <ul class="bullets">
-                <li><strong>Entrada:</strong> Gamma Ray (GR) crudo de pozos</li>
-                <li><strong>Paso 1:</strong> Normalizaci&oacute;n GR (min/max por pozo)</li>
-                <li><strong>Paso 2:</strong> Aplicaci&oacute;n ecuaci&oacute;n Larionov</li>
-                <li><strong>Salida:</strong> Curva Vshale (0&ndash;1) por pozo</li>
-              </ul>
-            </div>
-            <div class="card">
-              <div class="card-title">&#128228; Interpretaci&oacute;n</div>
-              <ul class="bullets">
-                <li><span class="highlight-green">Vshale &asymp; 0</span> &rarr; Arena (reservorio)</li>
-                <li><span class="highlight-gold">Vshale &asymp; 0.5</span> &rarr; Zona transicional</li>
-                <li><span class="highlight-purple">Vshale &asymp; 1</span> &rarr; Lutita (sello)</li>
-              </ul>
+        style="display:grid; grid-template-columns:1fr 1.2fr; gap:32px; max-width:1260px; width:100%; align-items:center;">
+        <div style="display:flex; flex-direction:column; justify-content:center; gap:20px;">
+          <div class="card">
+            <div class="card-title">&#128229; Flujo de Trabajo</div>
+            <ul class="bullets">
+              <li><strong>Paso 1:</strong> Normalizaci&oacute;n Gamma Ray (GR) por pozo</li>
+              <li><strong>Paso 2:</strong> Aplicaci&oacute;n ecuaci&oacute;n emp&iacute;rica capa por capa</li>
+              <li><strong>Salida:</strong> Curva continua y estandarizada Vshale (0&ndash;1)</li>
+            </ul>
+          </div>
+          <div class="card" style="position:relative; z-index:5;">
+            <div class="card-title">&#128228; Interpretaci&oacute;n Espacial (Capas)</div>
+            <p style="font-size:0.8rem; color:var(--muted); margin-bottom:12px;">El registro 1D se correlaciona con la
+              unidad estratigr&aacute;fica horizontal esperada:</p>
+            <div style="display:flex; flex-direction:column; gap:8px; font-size:0.9rem;">
+              <div
+                style="background:rgba(168,85,247,0.15); border-left:6px solid #a855f7; padding:12px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 12px rgba(0,0,0,0.2);">
+                <span style="color:#e9d5ff;">Vshale &asymp; 1.0</span> <strong style="color:#d8b4fe;">Lutita
+                  (Sello)</strong>
+              </div>
+              <div
+                style="background:rgba(245,158,11,0.15); border-left:6px solid #f59e0b; padding:12px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 12px rgba(0,0,0,0.2);">
+                <span style="color:#fde68a;">Vshale &asymp; 0.5</span> <strong style="color:#fcd34d;">Zona
+                  Transicional</strong>
+              </div>
+              <div
+                style="background:rgba(34,197,94,0.15); border-left:6px solid #22c55e; padding:12px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 12px rgba(0,0,0,0.2);">
+                <span style="color:#bbf7d0;">Vshale &asymp; 0.0</span> <strong style="color:#86efac;">Arena
+                  (Reservorio)</strong>
+              </div>
             </div>
           </div>
         </div>
         <div class="img-col">
-          <div class="s6-pan-wrap">
-            <img id="s6-img" src="img/vshale_boreas_annotated.jpg" alt="Vshale Boreas-1" class="s6-pan-img"
-              style="max-height:300px; object-fit:contain; background:#fff;">
-          </div>
-          <div class="img-caption">Perfil real Vshale &ndash; Boreas-1<br><em>GR normalizado &rarr; Larionov &rarr;
-              curva 0&ndash;1</em></div>
-        </div>
-      </div>
-      <div style="margin-top:12px; max-width:1260px; width:100%;">
-        <div class="img-caption" style="margin-bottom:6px;">Perfiles reales (datos NOPIMS &ndash; Subcuenca Caswell):
-        </div>
-        <div class="vshale-gallery">
-          <div class="img-col"><img src="img/vshale_boreas_annotated.jpg" alt="Boreas-1">
-            <div class="img-caption">Boreas-1</div>
-          </div>
-          <div class="img-col"><img src="img/vshale_poseidon.png" alt="Poseidon-1">
-            <div class="img-caption">Poseidon-1</div>
-          </div>
-          <div class="img-col"><img src="img/vshale_proteus.png" alt="Proteus-1">
-            <div class="img-caption">Proteus-1</div>
-          </div>
+          <img src="img/vshale_boreas_annotated.jpg" alt="Vshale Boreas-1" class="slide-img kb-gentle"
+            style="width:100%; max-height:480px; object-fit:contain; border-radius:12px; border:1px solid rgba(255,255,255,0.08);">
+          <div class="img-caption" style="margin-top:14px; text-align:center;">Perfil real Vshale &ndash;
+            Boreas-1<br><em>Zonas litol&oacute;gicas coloreadas bajo criterio petrof&iacute;sico</em></div>
         </div>
       </div>
     </section>
@@ -1327,8 +1324,6 @@
         slides[current].classList.add('active');
         // ── Per-slide animations ──
         if (current === SLIDE3) startSlide3Anim();
-        else if (current === SLIDE6) startSlide6Pan();
-        else stopSlide6Pan();
       }, 10);
       updateUI();
     }
@@ -1352,46 +1347,19 @@
     updateUI();
 
     // ── SLIDE ANIMATION HOOKS ──────────────────────────────────────
-    // Slide indices (0-based): Slide 3 = index 2, Slide 6 = index 5, Slide 7 = index 6
-    const SLIDE3 = 2, SLIDE6 = 5, SLIDE7 = 6;
-    let s6Timer = null;
+    // Slide index (0-based): Slide 3 = index 2
+    const SLIDE3 = 2;
 
     function startSlide3Anim() {
       const img = document.getElementById('s3-model');
       if (!img) return;
-      img.classList.remove('kb-slow'); img.classList.add('_tmp');
-      img.offsetHeight;
-      img.classList.remove('_tmp'); img.classList.add('kb-slow');
-    }
-
-    function startSlide6Pan() {
-      clearInterval(s6Timer);
-      const img = document.getElementById('s6-img');
-      if (!img) return;
-      // States: 0=full, 1=zoom-left, 2=zoom-right
-      const states = [
-        { transform: 'scale(1) translateX(0)' },
-        { transform: 'scale(1.55) translateX(18%)' },
-        { transform: 'scale(1.55) translateX(-18%)' },
-        { transform: 'scale(1) translateX(0)' }
-      ];
-      let step = 0;
-      img.style.transform = states[0].transform;
-      s6Timer = setInterval(() => {
-        step = (step + 1) % states.length;
-        img.style.transform = states[step].transform;
-      }, 3200);
-    }
-
-    function stopSlide6Pan() {
-      clearInterval(s6Timer);
-      const img = document.getElementById('s6-img');
-      if (img) img.style.transform = 'scale(1) translateX(0)';
+      img.classList.remove('anim-pop-zoom');
+      void img.offsetHeight; // reflow to restart css animation
+      img.classList.add('anim-pop-zoom');
     }
 
     // Fire animation for initial slide
     if (current === SLIDE3) startSlide3Anim();
-    if (current === SLIDE6) startSlide6Pan();
 
     // ═══════════════════════════════════════════
     // ANIMATED BACKGROUND: Fluid Gradient + Contour Lines
@@ -1520,7 +1488,8 @@
         drawContours();
         requestAnimationFrame(frame);
       }
-      requestAnimationFrame(frame);   })();
+      requestAnimationFrame(frame);
+    })();
   </script>
 </body>
 
