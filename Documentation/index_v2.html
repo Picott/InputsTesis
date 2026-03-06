@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sustentación de Tesis – Juan David Basto Picott</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0b0f1a; --surface: #111827; --surface2: #1a2236;
+      --accent: #3b82f6; --accent2: #8b5cf6; --accent3: #10b981;
+      --gold: #f59e0b; --text: #e2e8f0; --muted: #94a3b8;
+      --border: rgba(255,255,255,0.08);
+    }
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; }
+    #progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.4s ease; z-index: 100; }
+    #deck { width: 100vw; height: 100vh; position: relative; }
+    .slide {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; padding: 60px 80px;
+      opacity: 0; transform: translateX(60px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      pointer-events: none; text-align: center; background: transparent !important;
+    }
+    .slide.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+    .slide.exit { opacity: 0; transform: translateX(-60px); }
+    #bg-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+    .slide-img { width: 100%; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 8px 32px rgba(0,0,0,0.5); object-fit: cover; }
+    .s3-model-img { transition: all 0.7s cubic-bezier(0.25,1,0.5,1); transform-origin: right center; position: relative; z-index: 10; }
+    .s3-zoomed { transform: scale(1.45) translateX(-8%) !important; box-shadow: 0 40px 100px rgba(0,0,0,0.9) !important; background: #0b0f1a; border-radius: 12px; }
+    .img-col { display: flex; flex-direction: column; gap: 8px; align-items: center; justify-content: center; }
+    .img-caption { font-size: 0.68rem; color: var(--muted); text-align: center; font-style: italic; margin-top: 4px; }
+    .slide::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.012) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.012) 1px,transparent 1px); background-size: 70px 70px; pointer-events: none; }
+    .badge { display: inline-block; background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.5); color: #f59e0b; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 14px; border-radius: 100px; margin-bottom: 20px; }
+    h1.title { font-size: clamp(2.2rem,4vw,3.8rem); font-weight: 900; line-height: 1.1; background: linear-gradient(135deg,#fff 30%,var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 20px; max-width: 900px; }
+    h2.slide-title { font-size: clamp(1.6rem,3vw,2.5rem); font-weight: 800; background: linear-gradient(135deg,#fff 40%,var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 30px; }
+    .author-block { margin-top: 30px; display: flex; flex-direction: column; gap: 6px; }
+    .author-block .name { font-size: 1.3rem; font-weight: 700; color: var(--text); }
+    .author-block .detail { font-size: 0.9rem; color: var(--muted); }
+    .card { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 16px; padding: 24px 28px; position: relative; overflow: hidden; }
+    .card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg,var(--accent),var(--accent2)); }
+    .card-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    ul.bullets { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    ul.bullets li { display: flex; align-items: flex-start; gap: 12px; font-size: 1rem; color: var(--text); line-height: 1.5; }
+    ul.bullets li::before { content: '▸'; color: var(--accent); font-size: 0.9rem; margin-top: 2px; flex-shrink: 0; }
+    ul.bullets li strong { color: #fff; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; width: 100%; max-width: 1100px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; width: 100%; max-width: 1100px; }
+    .icon-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 16px; padding: 28px 22px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; transition: transform 0.2s, border-color 0.2s; }
+    .icon-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .icon-card .icon { font-size: 2.4rem; }
+    .icon-card .ic-title { font-size: 1rem; font-weight: 700; color: #fff; }
+    .icon-card .ic-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+    .tech-grid { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; width: 100%; max-width: 900px; margin-bottom: 10px; }
+    .tech-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 100px; padding: 10px 20px; display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; transition: border-color 0.2s, transform 0.2s; }
+    .tech-pill:hover { border-color: var(--accent); transform: scale(1.05); }
+    .tech-pill .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .video-list { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+    .video-item { display: flex; align-items: center; gap: 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 18px; transition: border-color 0.2s; }
+    .video-item:hover { border-color: var(--accent2); }
+    .video-num { width: 30px; height: 30px; flex-shrink: 0; background: linear-gradient(135deg,var(--accent2),var(--accent)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+    .video-text { font-size: 0.9rem; color: var(--text); font-weight: 500; }
+    .stats-row { display: flex; gap: 18px; width: 100%; max-width: 1100px; justify-content: center; }
+    .stat-card { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 16px; padding: 28px 20px; text-align: center; }
+    .stat-card .stat-val { font-size: 2.4rem; font-weight: 900; background: linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .stat-card .stat-label { font-size: 0.85rem; color: var(--muted); margin-top: 6px; }
+    #counter { position: fixed; bottom: 24px; right: 32px; font-size: 0.75rem; color: var(--muted); font-variant-numeric: tabular-nums; z-index: 50; }
+    #nav { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 50; }
+    .nav-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 10px 22px; border-radius: 100px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: background 0.2s, border-color 0.2s; font-family: 'Inter', sans-serif; }
+    .nav-btn:hover { background: var(--surface); border-color: var(--accent); color: var(--accent); }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+    #hint { position: fixed; bottom: 56px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; color: var(--muted); z-index: 50; }
+    #notes-toggle { position: fixed; top: 16px; right: 16px; background: var(--surface2); border: 1px solid var(--border); color: var(--muted); padding: 8px 14px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; cursor: pointer; z-index: 100; font-family: 'Inter', sans-serif; transition: border-color 0.2s; }
+    #notes-toggle:hover { border-color: var(--accent); color: var(--accent); }
+    #notes-panel { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(17,24,39,0.97); border: 1px solid var(--border); border-radius: 12px; padding: 18px 24px; max-width: 700px; width: calc(100% - 60px); font-size: 0.85rem; color: var(--muted); line-height: 1.7; z-index: 80; display: none; backdrop-filter: blur(10px); }
+    #notes-panel.visible { display: block; }
+    #notes-panel .notes-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 8px; }
+    #dots { position: fixed; top: 50%; right: 20px; transform: translateY(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 50; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: background 0.3s, transform 0.3s; cursor: pointer; }
+    .dot.active { background: var(--accent); transform: scale(1.6); }
+    .highlight-blue { color: var(--accent); font-weight: 700; }
+    .highlight-green { color: var(--accent3); font-weight: 700; }
+    .highlight-purple { color: var(--accent2); font-weight: 700; }
+    .highlight-gold { color: var(--gold); font-weight: 700; }
+    code { font-family: 'Fira Code', monospace; font-size: 0.85em; background: rgba(59,130,246,0.1); color: var(--accent); padding: 2px 6px; border-radius: 4px; }
+    .separator { width: 60px; height: 3px; background: linear-gradient(90deg,var(--accent),var(--accent2)); border-radius: 2px; margin: 12px auto; }
+    a.link-btn { display: inline-flex; align-items: center; gap: 8px; background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.35); color: var(--accent); font-size: 0.8rem; font-weight: 600; padding: 8px 16px; border-radius: 100px; text-decoration: none; margin-top: 12px; transition: background 0.2s, border-color 0.2s, transform 0.2s; }
+    a.link-btn:hover { background: rgba(59,130,246,0.22); transform: translateY(-2px); border-color: var(--accent); }
+    a.link-btn.green { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.35); color: var(--accent3); }
+    a.link-btn.green:hover { background: rgba(16,185,129,0.22); border-color: var(--accent3); }
+    a.link-btn.purple { background: rgba(139,92,246,0.12); border-color: rgba(139,92,246,0.35); color: var(--accent2); }
+    a.link-btn.purple:hover { background: rgba(139,92,246,0.22); border-color: var(--accent2); }
+
+    /* ══════════════════════════════════════════
+       FIX SLIDE 3 — 45% text | 55% image
+    ══════════════════════════════════════════ */
+    .s03-grid {
+      display: grid;
+      grid-template-columns: 45% 55%;
+      gap: 20px;
+      max-width: 1260px;
+      width: 100%;
+      align-items: center;
+    }
+
+    /* ══════════════════════════════════════════
+       FIX SLIDE 5 — equal text cols + narrow image
+    ══════════════════════════════════════════ */
+    .s05-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 160px;
+      gap: 18px;
+      max-width: 1260px;
+      width: 100%;
+      align-items: start;
+    }
+
+    /* ══════════════════════════════════════════
+       FIX SLIDE 10 — equal columns, matched heights
+    ══════════════════════════════════════════ */
+    .s10-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      width: 100%;
+      max-width: 1100px;
+      align-items: start;
+    }
+    .s10-grid .card { height: 100%; text-align: left; }
+    .s10-grid ul.bullets li { font-size: 0.88rem; line-height: 1.55; }
+  </style>
+</head>
+<body>
+  <canvas id="bg-canvas"></canvas>
+  <div id="progress-bar"></div>
+  <div id="dots"></div>
+  <button id="notes-toggle" onclick="toggleNotes()">📋 Notas</button>
+  <div id="notes-panel">
+    <div class="notes-label">🎤 Notas del presentador</div>
+    <div id="notes-text"></div>
+  </div>
+  <div id="nav">
+    <button class="nav-btn" id="btn-prev" onclick="changeSlide(-1)">← Anterior</button>
+    <button class="nav-btn" id="btn-next" onclick="changeSlide(1)">Siguiente →</button>
+  </div>
+  <div id="hint">← → para navegar · N para notas</div>
+  <div id="counter"></div>
+
+  <div id="deck">
+
+    <!-- SLIDE 1: TÍTULO -->
+    <section class="slide active" data-notes="Buenos días/tardes a todos. Hoy presento mi trabajo de grado titulado 'Creación de Material Educativo Digital para la Construcción y Visualización de un Modelo Geoestadístico 3D del Vshale mediante Herramientas de Código Abierto'. El objetivo no era solo modelar geología, sino democratizar las herramientas para hacerlo.">
+      <div class="badge">Trabajo de Grado – Geología</div>
+      <h1 class="title">Creación de Material Educativo Digital para la Modelación Geoestadística 3D del Vshale con Herramientas de Código Abierto</h1>
+      <div class="separator"></div>
+      <div class="author-block" style="background:rgba(11,15,26,0.72);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px 36px;backdrop-filter:blur(10px);">
+        <div class="name">Juan David Basto Picott</div>
+        <div class="detail">Escuela de Geología · Universidad Industrial de Santander</div>
+        <div class="detail" style="color:#f59e0b;font-weight:600;margin-top:6px;">Para optar por el título de Geólogo</div>
+        <div class="detail" style="margin-top:6px;color:var(--muted);font-size:0.82rem;">Director: Juan Diego Colegial Gutiérrez</div>
+        <div class="detail" style="margin-top:6px;color:var(--muted);font-size:0.85rem;">2026</div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: EL PROBLEMA -->
+    <section class="slide" data-notes="Nos enfrentamos a un reto común en la academia: el software industrial es poderoso pero prohibitivamente costoso y opaco. Los estudiantes aprenden a hacer clic en botones sin entender la geoestadística que hay detrás.">
+      <div class="badge">Motivación</div>
+      <h2 class="slide-title">El Problema</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:1100px;width:100%;align-items:start;">
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="card">
+            <div class="card-title">💰 Software Comercial</div>
+            <ul class="bullets">
+              <li>Petrel, Techlog, Kingdom — licencias <strong>costosas</strong></li>
+              <li>Acceso restringido en entornos académicos</li>
+              <li>Barrera económica para estudiantes e investigadores</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">📦 La "Caja Negra"</div>
+            <ul class="bullets">
+              <li>Algoritmos opacos sin trazabilidad</li>
+              <li>Se aprende a <strong>hacer clic</strong>, no a comprender</li>
+              <li>Falta de <strong>reproducibilidad</strong> y <strong>transparencia</strong></li>
+            </ul>
+          </div>
+        </div>
+        <div class="img-col">
+          <img src="img/caswell_map.jpg" class="slide-img" alt="Mapa Subcuenca Caswell" style="max-height:320px;">
+          <div class="img-caption">Subcuenca Caswell – área de trabajo<br>Datos públicos NOPIMS – Cuenca de Browse, Australia</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: OBJETIVOS — FIXED -->
+    <section class="slide" data-notes="El objetivo general fue desarrollar un OVA que integre un modelo geoestadístico 3D del Vshale, construido con scripts Python públicos, para fortalecer competencias de modelado. Los cuatro objetivos específicos se cumplen en diapositivas específicas del trabajo.">
+      <div class="badge">Objetivos</div>
+      <h2 class="slide-title">¿Qué se propuso?</h2>
+      <div class="s03-grid">
+        <div id="s3-content" style="display:flex;flex-direction:column;gap:14px;transition:opacity 0.4s ease;">
+          <div class="card" style="text-align:left;">
+            <div class="card-title">🎯 Objetivo General</div>
+            <p style="color:var(--muted);font-size:0.88rem;line-height:1.6;">Desarrollar un <strong>OVA</strong> que integre un modelo geoestadístico 3D del Vshale, construido con scripts Python públicos, para fortalecer competencias de modelado en estudiantes de geociencias.</p>
+          </div>
+          <div class="card" style="text-align:left;">
+            <div class="card-title">📌 Objetivos Específicos</div>
+            <ul class="bullets">
+              <li><strong>OE1.</strong> Estandarizar registros de pozo (NOPIMS) → <span class="highlight-blue">Diap. 4–5</span></li>
+              <li><strong>OE2.</strong> Calcular Vshale (Larionov terciario) → <span class="highlight-green">Diap. 6</span></li>
+              <li><strong>OE3.</strong> Modelo 3D IDW anisotrópico → <span class="highlight-gold">Diap. 7</span></li>
+              <li><strong>OE4.</strong> Estrategia pedagógica audiovisual → <span class="highlight-purple">Diap. 8</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="img-col">
+          <img id="s3-model" src="img/model_3d_real.jpg" class="s3-model-img slide-img" alt="Modelo 3D final" style="max-height:420px;object-fit:contain;width:100%;">
+          <div class="img-caption" style="margin-top:10px;">Resultado final: Modelo 3D de Vshale – Subcuenca Caswell (IDW anisotrópico, PyVista)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: TECNOLOGÍAS -->
+    <section class="slide" data-notes="Se aprovechó el ecosistema de Python de código abierto. Lasio permite leer archivos LAS estándar de la industria. Pandas maneja los conjuntos de datos masivos. PyVista fue fundamental para crear visualizaciones 3D que rivalizan con el software comercial.">
+      <div class="badge">Stack Tecnológico</div>
+      <h2 class="slide-title">Herramientas Utilizadas</h2>
+      <div class="tech-grid">
+        <div class="tech-pill"><div class="dot" style="background:#3776ab"></div>Python 3</div>
+        <div class="tech-pill"><div class="dot" style="background:#e37519"></div>Pandas</div>
+        <div class="tech-pill"><div class="dot" style="background:#4dabcf"></div>NumPy</div>
+        <div class="tech-pill"><div class="dot" style="background:#8b5cf6"></div>SciPy</div>
+        <div class="tech-pill"><div class="dot" style="background:#10b981"></div>PyVista</div>
+        <div class="tech-pill"><div class="dot" style="background:#f59e0b"></div>Lasio</div>
+        <div class="tech-pill"><div class="dot" style="background:#e2e8f0"></div>Matplotlib</div>
+      </div>
+      <div class="grid-2" style="max-width:1100px;width:100%">
+        <div class="card">
+          <div class="card-title">📥 Entrada de datos</div>
+          <ul class="bullets">
+            <li><code>Lasio</code> — lectura de archivos <strong>.LAS</strong> (estándar industria)</li>
+            <li><code>Pandas</code> — manipulación de datos tabulares</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">🔊 Procesamiento y visualización</div>
+          <ul class="bullets">
+            <li><code>NumPy / SciPy</code> — cálculos matemáticos e interpolación</li>
+            <li><code>PyVista</code> — visualización 3D interactiva</li>
+          </ul>
+        </div>
+      </div>
+      <div class="img-col" style="margin-top:16px;max-width:1100px;width:100%;">
+        <img src="img/las_pipeline.jpg" class="slide-img" alt="Pipeline LAS a CSV" style="max-height:200px;object-fit:contain;">
+        <div class="img-caption">Ingesta de datos: archivos .LAS → Python (lasio) → .CSV estructurado</div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: MARCO METODOLÓGICO — FIXED -->
+    <section class="slide" data-notes="La metodología se fundamenta en el Constructivismo: el conocimiento se construye activamente resolviendo problemas reales con datos de pozos. El OVA se organiza en tres momentos pedagógicos y cuatro fichas técnicas modulares.">
+      <div class="badge">Marco Metodológico</div>
+      <h2 class="slide-title">Enfoque Pedagógico y Flujo Técnico</h2>
+      <div class="s05-grid">
+        <div class="card" style="text-align:left;">
+          <div class="card-title">📚 Secuencia Didáctica (Constructivismo)</div>
+          <ul class="bullets">
+            <li><span class="highlight-blue">Fase Inicio</span> — Diagnóstica: contexto geológico, datos NOPIMS, concepto Vshale <em>(1 sesión · 2h)</em></li>
+            <li><span class="highlight-green">Fase Desarrollo</span> — Ejecución: ingesta, cálculo petrofísico, segmentación, interpolación 3D <em>(3-4 sesiones · 6-8h)</em></li>
+            <li><span class="highlight-gold">Fase Cierre</span> — Sumativa: visualización 3D, retroalimentación con modelo conceptual <em>(1 sesión · 2h)</em></li>
+          </ul>
+        </div>
+        <div class="card" style="text-align:left;">
+          <div class="card-title">📓 Fichas Técnicas del OVA</div>
+          <ul class="bullets">
+            <li><strong>Ficha 1:</strong> <code>las_to_csv_Integrated.py</code> — Ingesta y conversión .LAS → .CSV</li>
+            <li><strong>Ficha 2:</strong> <code>normalizacion_vshale.py</code> — Cálculo petrofísico Larionov</li>
+            <li><strong>Ficha 3:</strong> <code>segmentacion.py</code> — Blocking litológico (Window=5, Umbral=0.05)</li>
+            <li><strong>Ficha 4:</strong> <code>interpolacion_3d_with_wells.py</code> — IDW anisotrópico + PyVista</li>
+          </ul>
+        </div>
+        <div class="img-col">
+          <img src="img/ova_phases.jpg" class="slide-img" alt="Fases didácticas OVA" style="width:160px;object-fit:contain;">
+          <div class="img-caption">Secuencia didáctica constructivista del OVA</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: CÁLCULO VSHALE -->
+    <section class="slide" data-notes="Aquí vemos el resultado del script de normalización. La curva de Vshale refleja con precisión la litología, proporcionando la base para nuestro modelo 3D.">
+      <div class="badge">Resultados – Vshale</div>
+      <h2 class="slide-title">Cálculo del Vshale</h2>
+      <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:32px;max-width:1260px;width:100%;align-items:center;">
+        <div id="s6-content" style="display:flex;flex-direction:column;gap:20px;transition:opacity 0.4s ease;">
+          <div class="card">
+            <div class="card-title">📥 Flujo de Trabajo</div>
+            <ul class="bullets">
+              <li><strong>Paso 1:</strong> Normalización Gamma Ray (GR) por pozo</li>
+              <li><strong>Paso 2:</strong> Aplicación ecuación empírica capa por capa</li>
+              <li><strong>Salida:</strong> Curva continua y estandarizada Vshale (0–1)</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">📤 Interpretación Espacial (Capas)</div>
+            <p style="font-size:0.8rem;color:var(--muted);margin-bottom:12px;">El registro 1D se correlaciona con la unidad estratigráfica horizontal esperada:</p>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:0.9rem;">
+              <div style="background:rgba(168,85,247,0.15);border-left:6px solid #a855f7;padding:12px;border-radius:6px;display:flex;justify-content:space-between;align-items:center;">
+                <span style="color:#e9d5ff;">Vshale ≈ 1.0</span><strong style="color:#d8b4fe;">Lutita (Sello)</strong>
+              </div>
+              <div style="background:rgba(245,158,11,0.15);border-left:6px solid #f59e0b;padding:12px;border-radius:6px;display:flex;justify-content:space-between;align-items:center;">
+                <span style="color:#fde68a;">Vshale ≈ 0.5</span><strong style="color:#fcd34d;">Zona Transicional</strong>
+              </div>
+              <div style="background:rgba(34,197,94,0.15);border-left:6px solid #22c55e;padding:12px;border-radius:6px;display:flex;justify-content:space-between;align-items:center;">
+                <span style="color:#bbf7d0;">Vshale ≈ 0.0</span><strong style="color:#86efac;">Arena (Reservorio)</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="img-col">
+          <img id="s6-model" src="img/vshale_boreas_log.jpg" alt="Vshale Boreas-1" class="slide-img s3-model-img" style="width:100%;max-height:480px;object-fit:contain;border-radius:12px;">
+          <div class="img-caption" style="margin-top:14px;">Perfil real Vshale – Boreas-1<br><em>Zonas litológicas coloreadas bajo criterio petrofísico</em></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: MODELO 3D -->
+    <section class="slide" data-notes="El resultado técnico central es el modelo IDW anisotrópico. El factor de anisotropía de 0.05 en el eje Z fuerza al algoritmo a priorizar la continuidad LATERAL sobre la vertical, imitando la estratificación natural de la cuenca sedimentaria y evitando artefactos visuales conocidos como 'ojos de buey'.">
+      <div class="badge">Resultados – Modelo 3D</div>
+      <h2 class="slide-title">Interpolación IDW + Visualización 3D</h2>
+      <div id="s7-content" style="width:100%;max-width:1260px;transition:opacity 0.4s ease;">
+        <div class="grid-2" style="max-width:1260px;">
+          <div class="card">
+            <div class="card-title">▪ Segmentación Litológica (Blocking)</div>
+            <ul class="bullets">
+              <li>Agrupa miles de lecturas en <strong>bloques geológicos</strong> homogéneos</li>
+              <li>Parámetros: <code>Window=5</code>, <code>Umbral=0.05</code></li>
+              <li>Reduce ruido eléctrico · resalta capas estratigráficas reales</li>
+              <li>Cada bloque recibe un <code>Segmento_ID</code> único</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">🗺 IDW Anisotrópico</div>
+            <ul class="bullets">
+              <li>Malla estructurada (<code>StructuredGrid</code>) X–Y–Z</li>
+              <li>Factor de horizontalidad: <code>0.05 en Z</code> — busca similitud <strong>lateral</strong></li>
+              <li>Evita artefactos visuales (<strong>"ojos de buey"</strong>)</li>
+              <li>Sliders para cortes e isosuperficies con PyVista</li>
+            </ul>
+          </div>
+        </div>
+        <div class="stats-row" style="margin-top:18px;">
+          <div class="stat-card"><div class="stat-val">3D</div><div class="stat-label">Modelo volumétrico interactivo</div></div>
+          <div class="stat-card"><div class="stat-val">Z=0.05</div><div class="stat-label">Factor de Horizontalidad</div></div>
+          <div class="stat-card"><div class="stat-val">$0</div><div class="stat-label">Costo de licencias</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:1260px;width:100%;margin-top:14px;">
+          <div class="img-col">
+            <img src="img/model_3d_slide7.jpg" alt="Modelo 3D Vshale" style="max-height:220px;object-fit:contain;width:100%;border-radius:8px;">
+            <div class="img-caption">Modelo 3D Vshale – Poseidon · IDW Z=0.05</div>
+          </div>
+          <div class="img-col">
+            <img src="img/model_3d_gr.jpg" alt="Modelo 3D Gamma Ray" style="max-height:220px;object-fit:contain;width:100%;border-radius:8px;">
+            <div class="img-caption">Modelo 3D Gamma Ray – Poseidon<br><em>Comparación de congruencia espacial</em></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: MODELOS CLOSEUP -->
+    <section class="slide">
+      <div class="badge">Modelos Espaciales de Fase</div>
+      <h2 class="slide-title">Visualización Detallada 3D</h2>
+      <div style="display:flex;justify-content:center;gap:20px;align-items:stretch;width:100%;height:75vh;">
+        <div style="flex:1;display:flex;flex-direction:column;background:#1e293b;border-radius:12px;padding:20px;box-shadow:0 10px 25px rgba(0,0,0,0.5);align-items:center;">
+          <img src="img/model_3d_slide7.jpg" alt="Vshale 3D" style="width:100%;height:100%;object-fit:contain;border-radius:8px;">
+          <div style="font-size:1.1rem;color:#f8fafc;font-weight:bold;margin-top:16px;">Modelo 3D Vshale</div>
+          <div style="font-size:0.9rem;color:#94a3b8;margin-top:4px;">Disociación estratigráfica con Z=0.05</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;background:#1e293b;border-radius:12px;padding:20px;box-shadow:0 10px 25px rgba(0,0,0,0.5);align-items:center;">
+          <img src="img/model_3d_gr.jpg" alt="Gamma Ray 3D" style="width:100%;height:100%;object-fit:contain;border-radius:8px;">
+          <div style="font-size:1.1rem;color:#f8fafc;font-weight:bold;margin-top:16px;">Modelo 3D Gamma Ray</div>
+          <div style="font-size:0.9rem;color:#94a3b8;margin-top:4px;">Comparación de contingencia lito-espacial</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9: OVA -->
+    <section class="slide" data-notes="El producto principal es el OVA: un Objeto Virtual de Aprendizaje con tres componentes — repositorio GitHub, manual técnico y serie de 7 videos narrados por un presentador digital.">
+      <div class="badge">OVA – Objeto Virtual de Aprendizaje</div>
+      <h2 class="slide-title">El Recurso Educativo</h2>
+      <div class="grid-2">
+        <div class="card" style="text-align:left;">
+          <div class="card-title">📁 Componentes del OVA</div>
+          <ul class="bullets">
+            <li>👤 Presentador digital en videos narrados</li>
+            <li>📖 Manual técnico paso a paso</li>
+            <li>👨‍💻 Repositorio GitHub — código abierto MIT</li>
+          </ul>
+          <div class="card-title" style="margin-top:14px;">📌 Resultados de Aprendizaje</div>
+          <ul class="bullets">
+            <li>Entiende el flujo de datos LAS → Modelo 3D</li>
+            <li>Elabora modelos estratigráficamente coherentes</li>
+            <li>Opera herramientas Open Source sin licencias comerciales</li>
+          </ul>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;">
+            <a class="link-btn" href="https://github.com/Picott/InputsTesis" target="_blank">📁 GitHub – InputsTesis</a>
+            <a class="link-btn purple" href="#" target="_blank">📄 Informe Final PDF</a>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding-left:4px;">
+            <div class="card-title" style="margin-bottom:0;color:#f59e0b;">🎬 Serie de Videos (7 módulos)</div>
+            <a class="link-btn green" href="https://youtube.com/playlist?list=PLEtE0tRZvd3OUso5G2yexPzwRnT91e63I" target="_blank">▶ Ver Playlist</a>
+          </div>
+          <div class="video-list">
+            <div class="video-item"><div class="video-num">1</div><div class="video-text">Introducción al Proyecto y al Concepto de Vshale <span style="color:var(--muted);font-size:0.75rem;">· 3:39</span></div></div>
+            <div class="video-item"><div class="video-num">2</div><div class="video-text">Procesamiento y normalización de archivos .LAS <span style="color:var(--muted);font-size:0.75rem;">· 2:19</span></div></div>
+            <div class="video-item"><div class="video-num">3</div><div class="video-text">Cálculo del Vshale utilizando la Ecuación de Larionov <span style="color:var(--muted);font-size:0.75rem;">· 1:46</span></div></div>
+            <div class="video-item"><div class="video-num">4</div><div class="video-text">Segmentación Litológica por Umbral <span style="color:var(--muted);font-size:0.75rem;">· 2:11</span></div></div>
+            <div class="video-item"><div class="video-num">5</div><div class="video-text">Construcción de la Malla Estructurada y Aplicación de Interpolación IDW <span style="color:var(--muted);font-size:0.75rem;">· 2:11</span></div></div>
+            <div class="video-item"><div class="video-num">6</div><div class="video-text">Visualización 3D con PyVista <span style="color:var(--muted);font-size:0.75rem;">· 2:16</span></div></div>
+            <div class="video-item"><div class="video-num">7</div><div class="video-text">Conclusiones y Aplicaciones del Modelo <span style="color:var(--muted);font-size:0.75rem;">· 1:50</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10: CONCLUSIONES — FIXED -->
+    <section class="slide" data-notes="Las conclusiones están directamente amarradas a cada objetivo específico. OE1 se resolvió con el preprocesamiento (.LAS→CSV). OE2 con el cálculo Larionov. OE3 con el modelo IDW anisotrópico. OE4 con el OVA y los 7 videos.">
+      <div class="badge">Conclusiones</div>
+      <h2 class="slide-title">Conclusiones y Recomendaciones</h2>
+      <div class="s10-grid">
+        <div class="card">
+          <div class="card-title">✅ Logros – alineados a objetivos</div>
+          <ul class="bullets">
+            <li><span class="highlight-blue">OE1</span> → Preprocesamiento 8 pozos NOPIMS en Python, 0 licencias</li>
+            <li><span class="highlight-green">OE2</span> → Vshale Larionov terciario validado vs. GR crudo</li>
+            <li><span class="highlight-gold">OE3</span> → Modelo IDW anisotrópico (Z=0.05) sin artefactos visuales</li>
+            <li><span class="highlight-purple">OE4</span> → OVA con avatar digital, manual y 7 videos en YouTube</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">🔮 Recomendaciones y Trabajo Futuro</div>
+          <ul class="bullets">
+            <li>Implementar OVA como <strong>taller oficial</strong> en Geoestadística, Modelamiento de Yacimientos y Petrofísica (UIS)</li>
+            <li>Explorar <strong>Kriging</strong> como alternativa a IDW y comparar resultados</li>
+            <li>Incorporar módulos de <strong>porosidad y permeabilidad</strong> en iteraciones futuras</li>
+            <li><strong>Integrar datos sísmicos</strong> para correlacionar modelo petrofísico con estructura geológica</li>
+            <li>Desarrollar <strong>visualizador web interactivo</strong> (PyVista Trame/Panel) para eliminar instalación local</li>
+            <li>Realizar <strong>pruebas piloto</strong> con estudiantes para medir retención del conocimiento</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 11: GRACIAS -->
+    <section class="slide" data-notes="Gracias por su atención. Estoy disponible para responder sus preguntas.">
+      <div class="badge">Fin de la presentación</div>
+      <h1 class="title">¡Gracias!</h1>
+      <div class="separator"></div>
+      <p style="color:var(--muted);font-size:1rem;max-width:500px;">Quedo a disposición del jurado para responder inquietudes.</p>
+      <div class="grid-3" style="margin-top:36px;max-width:800px;">
+        <a class="icon-card" href="https://github.com/Picott/InputsTesis" target="_blank" style="text-decoration:none;">
+          <div class="icon"><svg viewBox="0 0 24 24" width="52" height="52" fill="white"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg></div>
+          <div class="ic-title">Código</div>
+          <div class="ic-desc">GitHub · InputsTesis-main · MIT License</div>
+        </a>
+        <a class="icon-card" href="https://youtube.com/playlist?list=PLEtE0tRZvd3OUso5G2yexPzwRnT91e63I" target="_blank" style="text-decoration:none;">
+          <div class="icon"><svg viewBox="0 0 24 24" width="52" height="52"><path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div>
+          <div class="ic-title">Videos</div>
+          <div class="ic-desc">Serie de 7 módulos en YouTube</div>
+        </a>
+        <a class="icon-card" href="#" target="_blank" style="text-decoration:none;">
+          <div class="icon">📚🎓</div>
+          <div class="ic-title">Documento</div>
+          <div class="ic-desc">Informe Final de Trabajo de Grado</div>
+        </a>
+      </div>
+    </section>
+
+  </div><!-- end #deck -->
+
+  <div style="position:fixed;bottom:20px;left:30px;right:30px;display:flex;justify-content:space-between;pointer-events:none;z-index:9999;opacity:0.85;align-items:flex-end;">
+    <img src="img/University.png" alt="University Logo" style="max-height:55px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.6));">
+    <img src="img/School.png" alt="School Logo" style="max-height:70px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.6));">
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    let current = 0, notesVisible = false;
+    const SLIDE3 = 2, SLIDE6 = 5;
+    let zoomStates = { [SLIDE3]: false, [SLIDE6]: false };
+
+    const dotsEl = document.getElementById('dots');
+    slides.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i === 0 ? ' active' : '');
+      d.onclick = () => goTo(i);
+      dotsEl.appendChild(d);
+    });
+
+    function updateUI() {
+      document.getElementById('progress-bar').style.width = ((current+1)/total*100) + '%';
+      document.getElementById('counter').textContent = (current+1) + ' / ' + total;
+      document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i===current));
+      document.getElementById('btn-prev').disabled = current===0;
+      document.getElementById('btn-next').disabled = current===total-1;
+      const isLast = current===total-1;
+      document.getElementById('nav').style.display = isLast ? 'none' : 'flex';
+      document.getElementById('hint').style.display = isLast ? 'none' : 'block';
+      document.getElementById('notes-text').textContent = slides[current].dataset.notes || '';
+    }
+
+    function goTo(index, fromDir=1) {
+      [{idx:SLIDE3,content:'s3-content',model:'s3-model'},{idx:SLIDE6,content:'s6-content',model:'s6-model'}].forEach(s => {
+        if (current===s.idx && index!==s.idx) {
+          zoomStates[s.idx]=false;
+          if(document.getElementById(s.content)) document.getElementById(s.content).style.opacity='1';
+          if(document.getElementById(s.model)) document.getElementById(s.model).classList.remove('s3-zoomed');
+        }
+      });
+      if (index<0||index>=total||index===current) return;
+      slides[current].classList.remove('active'); slides[current].classList.add('exit');
+      const old=current; setTimeout(()=>slides[old].classList.remove('exit'),500);
+      current=index;
+      slides[current].style.transform = fromDir>0 ? 'translateX(60px)' : 'translateX(-60px)';
+      setTimeout(()=>{ slides[current].style.transform=''; slides[current].classList.add('active'); },10);
+      updateUI();
+    }
+
+    function changeSlide(dir) {
+      const zoomable = {[SLIDE3]:{content:'s3-content',model:'s3-model'},[SLIDE6]:{content:'s6-content',model:'s6-model'}};
+      if (zoomable[current]) {
+        const s=zoomable[current];
+        if (dir===1 && !zoomStates[current]) {
+          zoomStates[current]=true;
+          document.getElementById(s.content).style.opacity='0';
+          document.getElementById(s.content).style.pointerEvents='none';
+          document.getElementById(s.model).classList.add('s3-zoomed'); return;
+        }
+        if (dir===-1 && zoomStates[current]) {
+          zoomStates[current]=false;
+          document.getElementById(s.content).style.opacity='1';
+          document.getElementById(s.content).style.pointerEvents='auto';
+          document.getElementById(s.model).classList.remove('s3-zoomed'); return;
+        }
+      }
+      goTo(current+dir, dir);
+    }
+
+    function toggleNotes() {
+      notesVisible=!notesVisible;
+      document.getElementById('notes-panel').classList.toggle('visible',notesVisible);
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key==='ArrowRight'||e.key==='ArrowDown') changeSlide(1);
+      if (e.key==='ArrowLeft'||e.key==='ArrowUp') changeSlide(-1);
+      if (e.key==='n'||e.key==='N') toggleNotes();
+      if (e.key==='Escape') { notesVisible=false; document.getElementById('notes-panel').classList.remove('visible'); }
+    });
+
+    updateUI();
+
+    // ANIMATED BACKGROUND
+    (function(){
+      const canvas=document.getElementById('bg-canvas'), ctx=canvas.getContext('2d');
+      let W,H,t=0;
+      function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+      window.addEventListener('resize',resize); resize();
+      function fade(t){ return t*t*t*(t*(t*6-15)+10); }
+      function lerp(a,b,t){ return a+t*(b-a); }
+      const perm=new Uint8Array(512);
+      for(let i=0;i<256;i++) perm[i]=i;
+      for(let i=255;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [perm[i],perm[j]]=[perm[j],perm[i]]; }
+      for(let i=0;i<256;i++) perm[i+256]=perm[i];
+      const grads=[];
+      for(let i=0;i<256;i++){ const a=Math.random()*Math.PI*2; grads[i]=[Math.cos(a),Math.sin(a)]; }
+      function grad2(hx,hy,x,y){ const g=grads[perm[(hx+perm[hy&255])&255]]; return g[0]*x+g[1]*y; }
+      function noise(x,y){
+        const xi=Math.floor(x)&255,yi=Math.floor(y)&255,xf=x-Math.floor(x),yf=y-Math.floor(y);
+        const u=fade(xf),v=fade(yf);
+        return lerp(lerp(grad2(xi,yi,xf,yf),grad2(xi+1,yi,xf-1,yf),u),lerp(grad2(xi,yi+1,xf,yf-1),grad2(xi+1,yi+1,xf-1,yf-1),u),v);
+      }
+      function grColor(level,levels,alpha){
+        const t=level/levels; let r,g,b;
+        if(t<0.33){ const s=t/0.33; r=Math.round(30+(20-30)*s); g=Math.round(100+(180-100)*s); b=Math.round(220+(120-220)*s); }
+        else if(t<0.66){ const s=(t-0.33)/0.33; r=Math.round(20+(230-20)*s); g=Math.round(180+(200-180)*s); b=Math.round(120+(20-120)*s); }
+        else{ const s=(t-0.66)/0.34; r=Math.round(230+(180-230)*s); g=Math.round(200+(30-200)*s); b=20; }
+        return 'rgba('+r+','+g+','+b+','+alpha+')';
+      }
+      function drawContours(){
+        const SCALE=3.2,LEVELS=14,step=H/110;
+        ctx.save();
+        for(let level=1;level<LEVELS;level++){
+          const threshold=-0.85+(level/LEVELS)*1.7, isMajor=level%4===0;
+          ctx.strokeStyle=grColor(level,LEVELS,isMajor?0.55:0.18);
+          ctx.lineWidth=isMajor?1.8:0.7; ctx.beginPath(); let started=false;
+          for(let y=0;y<=H;y+=step){
+            const fy=y/H; let prev=null;
+            for(let x=0;x<=W;x+=step){
+              const fx=x/W;
+              const n=noise(fx*SCALE+t*0.00008,fy*SCALE+t*0.00005);
+              const n2=noise(fx*SCALE*0.5+12-t*0.00004,fy*SCALE*0.5+t*0.00006);
+              const val=n*0.65+n2*0.35;
+              if(prev!==null&&(prev.val<threshold)!==(val<threshold)){
+                const frac=(threshold-prev.val)/(val-prev.val), px=prev.x+frac*step;
+                if(!started){ ctx.moveTo(px,y); started=true; } else { ctx.lineTo(px,y); }
+              }
+              prev={x,val};
+            }
+          }
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+      function frame(){ t++; ctx.fillStyle='#0b0f1a'; ctx.fillRect(0,0,W,H); drawContours(); requestAnimationFrame(frame); }
+      requestAnimationFrame(frame);
+    })();
+  </script>
+</body>
+</html>
