@@ -1314,6 +1314,10 @@
       setTimeout(() => {
         slides[current].style.transform = '';
         slides[current].classList.add('active');
+        // ── Per-slide animations ──
+        if (current === SLIDE3) startSlide3Anim();
+        else if (current === SLIDE6) startSlide6Pan();
+        else stopSlide6Pan();
       }, 10);
       updateUI();
     }
@@ -1374,18 +1378,9 @@
       if (img) img.style.transform = 'scale(1) translateX(0)';
     }
 
-    // Hook into goTo to trigger per-slide animations
-    const _origGoTo = goTo;
-    function goTo(index, fromDir) {
-      _origGoTo(index, fromDir);
-      if (current === SLIDE3) startSlide3Anim();
-      else if (current === SLIDE6) startSlide6Pan();
-      else stopSlide6Pan();
-    }
-    // Fire for initial slide
+    // Fire animation for initial slide
     if (current === SLIDE3) startSlide3Anim();
     if (current === SLIDE6) startSlide6Pan();
-
 
     // ═══════════════════════════════════════════
     // ANIMATED BACKGROUND: Fluid Gradient + Contour Lines
