@@ -102,6 +102,58 @@
       object-fit: cover;
     }
 
+    /* ── ZOOM / PAN ANIMATIONS ── */
+    @keyframes slowZoom {
+      0% {
+        transform: scale(1);
+      }
+
+      100% {
+        transform: scale(1.55);
+      }
+    }
+
+    @keyframes gentleZoom {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.18);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* Slide 3 – 3D model zooms in slowly so well names become readable */
+    .anim-slow-zoom {
+      animation: slowZoom 12s ease-in-out forwards;
+      transform-origin: center center;
+    }
+
+    /* Slide 6 – panning container; JS will drive translateX + scale via CSS var */
+    .s6-pan-wrap {
+      overflow: hidden;
+      border-radius: 12px;
+      width: 100%;
+    }
+
+    .s6-pan-img {
+      width: 100%;
+      transition: transform 1.8s cubic-bezier(0.45, 0, 0.55, 1);
+      transform-origin: center center;
+      border-radius: 10px;
+    }
+
+    /* Slide 7 – gentle zoom on both images */
+    .anim-gentle-zoom {
+      animation: gentleZoom 9s ease-in-out infinite;
+      transform-origin: center center;
+    }
+
+
     .img-col {
       display: flex;
       flex-direction: column;
@@ -850,9 +902,9 @@
             </ul>
           </div>
         </div>
-        <div class="img-col" style="grid-column: span 2;">
-          <img src="img/model_3d_real.png" class="slide-img" alt="Modelo 3D final del proyecto"
-            style="max-height:340px; object-fit:contain; width:100%;">
+        <div class="img-col" style="grid-column: span 2; overflow:hidden; border-radius:14px;">
+          <img id="s3-model" src="img/model_3d_real.png" class="slide-img anim-slow-zoom"
+            alt="Modelo 3D final del proyecto" style="max-height:340px; object-fit:contain; width:100%;">
           <div class="img-caption">Resultado final: Modelo 3D de Vshale &ndash; Subcuenca Caswell (IDW
             anisotr&oacute;fico, PyVista)</div>
         </div>
@@ -983,8 +1035,10 @@
           </div>
         </div>
         <div class="img-col">
-          <img src="img/vshale_boreas.png" alt="Vshale Boreas-1"
-            style="width:100%; max-height:280px; object-fit:contain; background:#fff; border-radius:10px; border:1px solid rgba(255,255,255,0.08);">
+          <div class="s6-pan-wrap">
+            <img id="s6-img" src="img/vshale_boreas.png" alt="Vshale Boreas-1" class="s6-pan-img"
+              style="max-height:300px; object-fit:contain; background:#fff;">
+          </div>
           <div class="img-caption">Perfil real Vshale &ndash; Boreas-1<br><em>GR normalizado &rarr; Larionov &rarr;
               curva 0&ndash;1</em></div>
         </div>
@@ -1049,13 +1103,13 @@
       <div
         style="display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:1260px; width:100%; margin-top:14px; align-items:start;">
         <div class="img-col">
-          <img src="img/model_3d_slide7.png" class="slide-img" alt="Modelo 3D Bloque Poseidon"
-            style="max-height:240px; object-fit:contain;">
+          <img src="img/model_3d_slide7.png" class="slide-img anim-gentle-zoom" alt="Modelo 3D Bloque Poseidon"
+            style="max-height:240px; object-fit:contain; animation-delay:0s;">
           <div class="img-caption">Modelo 3D &ndash; vista lateral · Bloque Poseidon · IDW Z=0.05</div>
         </div>
         <div class="img-col">
-          <img src="img/vshale_poseidon.png" alt="Vshale Poseidon-1"
-            style="width:100%; max-height:240px; object-fit:contain; background:#fff; border-radius:10px; border:1px solid rgba(255,255,255,0.08);">
+          <img src="img/vshale_poseidon.png" alt="Vshale Poseidon-1" class="anim-gentle-zoom"
+            style="width:100%; max-height:240px; object-fit:contain; background:#fff; border-radius:10px; border:1px solid rgba(255,255,255,0.08); animation-delay:4.5s;">
           <div class="img-caption">Perfil 1D de entrada &ndash; Poseidon-1<br><em>Curva Vshale Larionov · congruencia
               con el modelo 3D</em></div>
         </div>
@@ -1281,6 +1335,57 @@
     });
 
     updateUI();
+
+    // ── SLIDE ANIMATION HOOKS ──────────────────────────────────────
+    // Slide indices (0-based): Slide 3 = index 2, Slide 6 = index 5, Slide 7 = index 6
+    const SLIDE3 = 2, SLIDE6 = 5, SLIDE7 = 6;
+    let s6Timer = null;
+
+    function startSlide3Anim() {
+      const img = document.getElementById('s3-model');
+      if (!img) return;
+      img.style.animation = 'none';
+      img.offsetHeight; // reflow
+      img.style.animation = 'slowZoom 12s ease-in-out forwards';
+    }
+
+    function startSlide6Pan() {
+      clearInterval(s6Timer);
+      const img = document.getElementById('s6-img');
+      if (!img) return;
+      // States: 0=full, 1=zoom-left, 2=zoom-right
+      const states = [
+        { transform: 'scale(1) translateX(0)' },
+        { transform: 'scale(1.55) translateX(18%)' },
+        { transform: 'scale(1.55) translateX(-18%)' },
+        { transform: 'scale(1) translateX(0)' }
+      ];
+      let step = 0;
+      img.style.transform = states[0].transform;
+      s6Timer = setInterval(() => {
+        step = (step + 1) % states.length;
+        img.style.transform = states[step].transform;
+      }, 3200);
+    }
+
+    function stopSlide6Pan() {
+      clearInterval(s6Timer);
+      const img = document.getElementById('s6-img');
+      if (img) img.style.transform = 'scale(1) translateX(0)';
+    }
+
+    // Hook into goTo to trigger per-slide animations
+    const _origGoTo = goTo;
+    function goTo(index, fromDir) {
+      _origGoTo(index, fromDir);
+      if (current === SLIDE3) startSlide3Anim();
+      else if (current === SLIDE6) startSlide6Pan();
+      else stopSlide6Pan();
+    }
+    // Fire for initial slide
+    if (current === SLIDE3) startSlide3Anim();
+    if (current === SLIDE6) startSlide6Pan();
+
 
     // ═══════════════════════════════════════════
     // ANIMATED BACKGROUND: Fluid Gradient + Contour Lines
