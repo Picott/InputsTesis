@@ -823,10 +823,7 @@
     <button class="nav-btn" id="btn-next" onclick="changeSlide(1)">Siguiente →</button>
   </div>
 
-  <div class="logo-footer">
-    <img src="img/University.png" alt="University Logo">
-    <img src="img/School.png" alt="School Logo" style="max-height:65px;">
-  </div>
+
 
   <div id="hint">← → para navegar · N para notas</div>
   <div id="counter"></div>
@@ -1316,6 +1313,12 @@
   </section>
 
   </div><!-- end #deck -->
+
+  <div class="logo-footer" style="position: fixed; bottom: 20px; left: 30px; right: 30px; display: flex; justify-content: space-between; pointer-events: none; z-index: 9999; opacity: 0.85; align-items: flex-end;">
+    <img src="img/University.png" alt="University Logo" style="max-height: 55px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));">
+    <img src="img/School.png" alt="School Logo" style="max-height: 70px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));">
+  </div>
+
 
   <script>
     const slides = document.querySelectorAll('.slide');
